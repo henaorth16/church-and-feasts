@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    /* Name: custom color palette
+       Author: Ilias Ism
+       URL: https://gradient.page */
+
+    /* CSS: .bg-gradient { background: var(--gradient) } */
+    --gradient: #05386b;
+    --background: 223 99.55% 98.44%;
+    --foreground: 223 9.1% 0.88%;
+
+    --muted: 223 49.1% 72.2%;
+    --muted-foreground: 223 4.55% 42.2%;
+
+    --popover: 223 17.23% 92.2%;
+    --popover-foreground: 223 9.1% 1.1%;
+
+    --card: 223 17.23% 92.2%;
+    --card-foreground: 223 9.1% 1.1%;
+
+    --border: 223 14.1% 59.88%;
+    --input: 223 14.1% 89.88%;
+
+    --primary: 223 91% 22%;
+    --primary-foreground: 223 1.82% 92.2%;
+
+    --secondary: 223 4.55% 96.1%;
+    --secondary-foreground: 223 6.46% 12.2%;
+
+    --accent: 223 4.55% 86.1%;
+    --accent-foreground: 223 6.46% 12.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --ring: 223 91% 22%;
+
+    --radius: 0.6rem;
+  }
+}
+/* .dark {
+  --background: 0 0% 10.20%;
+  --foreground: 0 0% 87.84%;
+  --card: 0 0% 16.47%;
+  --card-foreground: 0 0% 87.84%;
+  --popover: 0 0% 16.47%;
+  --popover-foreground: 0 0% 87.84%;
+  --primary: 1.36 77.19% 55.29%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 92.04 47.91% 42.16%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: 0 0% 14.51%;
+  --muted-foreground: 0 0% 62.75%;
+  --accent: 206.71 89.02% 67.84%;
+  --accent-foreground: 0 0% 0%;
+  --destructive: 37.65 100% 50%;
+  --destructive-foreground: 0 0% 0%;
+  --border: 0 0% 29.02%;
+  --input: 0 0% 29.02%;
+  --ring: 1.36 77.19% 55.29%;
+  --chart-1: 1.36 77.19% 55.29%;
+  --chart-2: 92.04 47.91% 42.16%;
+  --chart-3: 206.71 89.02% 67.84%;
+  --chart-4: 37.65 100% 50%;
+  --chart-5: 15.88 15.32% 56.47%;
+  --sidebar: 0 0% 7.84%;
+  --sidebar-foreground: 0 0% 87.84%;
+  --sidebar-primary: 1.36 77.19% 55.29%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 206.71 89.02% 67.84%;
+  --sidebar-accent-foreground: 0 0% 0%;
+  --sidebar-border: 0 0% 29.02%;
+  --sidebar-ring: 1.36 77.19% 55.29%;
+  --font-sans: "Oxanium", sans-serif;
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono: "Source Code Pro", monospace;
+  --radius: 0px;
+  --shadow-2xs: 0px 2px 5px 0px hsl(0 0% 0% / 0.30);
+  --shadow-xs: 0px 2px 5px 0px hsl(0 0% 0% / 0.30);
+  --shadow-sm: 0px 2px 5px 0px hsl(0 0% 0% / 0.60), 0px 1px 2px -1px hsl(0 0% 0% / 0.60);
+  --shadow: 0px 2px 5px 0px hsl(0 0% 0% / 0.60), 0px 1px 2px -1px hsl(0 0% 0% / 0.60);
+  --shadow-md: 0px 2px 5px 0px hsl(0 0% 0% / 0.60), 0px 2px 4px -1px hsl(0 0% 0% / 0.60);
+  --shadow-lg: 0px 2px 5px 0px hsl(0 0% 0% / 0.60), 0px 4px 6px -1px hsl(0 0% 0% / 0.60);
+  --shadow-xl: 0px 2px 5px 0px hsl(0 0% 0% / 0.60), 0px 8px 10px -1px hsl(0 0% 0% / 0.60);
+  --shadow-2xl: 0px 2px 5px 0px hsl(0 0% 0% / 1.50);
+} */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body{
+    /* background-color: #04080e !important; */
+    color: rgb(18, 18, 18);
+  }
+}
+.card{
+  @apply shadow-xl shadow-gray-900
+}

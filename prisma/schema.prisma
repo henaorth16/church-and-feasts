@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(cuid())
+  username       String   @unique
+  password       String
+  role           Role     @default(CHURCH)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  church         Church?
+}
+
+model Church {
+  id              String   @id @default(cuid())
+  name            String
+  address         String?
+  email           String?
+  phone           String?
+  latitude        Float?
+  longitude       Float?
+  profileImage    String?
+  servantCount    Int?
+  description     String?
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  churchFeasts    ChurchFeast[]
+}
+
+model Feast {
+  id              String   @id @default(cuid())
+  saintName       String
+  description     String?
+  commemorationDate DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  churchFeasts    ChurchFeast[]
+}
+
+model ChurchFeast {
+  id              String   @id @default(cuid())
+  churchId        String
+  feastId         String
+  specialNotes    String?
+  church          Church   @relation(fields: [churchId], references: [id], onDelete: Cascade)
+  feast           Feast    @relation(fields: [feastId], references: [id], onDelete: Cascade)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([churchId, feastId])
+}
+
+enum Role {
+  ADMIN
+  CHURCH
+}
