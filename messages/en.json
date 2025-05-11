@@ -1,0 +1,63 @@
+{
+    "HomePage": {
+      "nav": {
+        "directory": "Church Directory",
+        "churches": "Churches",
+        "feasts": "Feasts",
+        "login": "Login"
+      },
+      "home": {
+        "title": "Church Directory & Feast Calendar",
+        "description": "Discover churches in your area and learn about saint commemorations and feast days throughout the year.",
+        "findChurches": "Find Churches",
+        "viewFeasts": "View Feast Calendar",
+        "todaysCommemorations": "Today's Commemorations",
+        "viewAll": "View All",
+        "noDescription": "No description available.",
+        "celebratedAt": "Celebrated at {count} church(es)",
+        "viewDetails": "View Details",
+        "featuredChurches": "Featured Churches",
+        "upcomingFeasts": "Upcoming Feasts",
+        "searchPrompt": "Looking for Something Specific?",
+        "searchHint": "Search for churches or feasts by name, location, or date.",
+        "searchButton": "Search Directory"
+      }
+    },
+    "SearchPage": {
+      "headerTitle": "Church Directory",
+      "navigationLinks": {
+        "churches": "Churches",
+        "feasts": "Feasts",
+        "login": "Login"
+      },
+      "pageTitle": "Search",
+      "pageDescription": "Find churches and feasts in our directory",
+      "searchResultsTitle": "Search results for: {query}",
+      "noResultsMessage": "No results found. Try a different search term.",
+      "tabs": {
+        "allResults": "All Results",
+        "churches": "Churches ({count})",
+        "feasts": "Feasts ({count})"
+      },
+      "churchesTitle": "Churches",
+      "feastsTitle": "Feasts",
+      "noDescription": "No description available.",
+      "viewDetails": "View Details",
+      "viewAllChurches": "View All {count} Churches",
+      "viewAllFeasts": "View All {count} Feasts",
+      "noChurchesFound": "No churches found matching your search criteria.",
+      "noFeastsFound": "No feasts found matching your search criteria.",
+     "placeholders": {
+    "search": "Search churches, feasts, saints...",
+    "date": "Filter by date"
+  },
+  "buttons": {
+    "search": "Search"
+  },
+  "radio": {
+    "all": "All",
+    "churches": "Churches",
+    "feasts": "Feasts"
+  }
+    }
+  }

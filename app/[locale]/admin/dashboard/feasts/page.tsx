@@ -3,7 +3,7 @@ import { redirect } from "next/navigation"
 import { jwtVerify } from "jose"
 import { PrismaClient } from "@prisma/client"
 import { AdminDashboardHeader } from "@/components/admin-dashboard-header"
-import { AdminFeastsList } from "../../../../components/admin-feasts-list"
+import { AdminFeastsList } from "../../../../../components/admin-feasts-list"
 
 const prisma = new PrismaClient()
 

@@ -7,6 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { MapPin, Calendar } from "lucide-react"
 import { SearchForm } from "@/components/search-form"
 import { formatDate } from "@/lib/utils"
+import FormattedDate from "@/components/formatted-date"
+import { getTranslations } from "next-intl/server"
 
 const prisma = new PrismaClient()
 
@@ -27,19 +29,16 @@ async function searchChurches(query: string) {
         {
           name: {
             contains: query,
-            // mode: "insensitive",
           },
         },
         {
           address: {
             contains: query,
-            // mode: "insensitive",
           },
         },
         {
           description: {
             contains: query,
-            // mode: "insensitive",
           },
         },
       ],
@@ -60,13 +59,11 @@ async function searchFeasts(query: string, date?: string) {
       {
         saintName: {
           contains: query,
-        //   mode: "insensitive",
         },
       },
       {
         description: {
           contains: query,
-        //   mode: "insensitive",
         },
       },
     ]
@@ -104,10 +101,11 @@ async function searchFeasts(query: string, date?: string) {
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const query = searchParams.q || ""
   const type = searchParams.type || "all"
-  const date = searchParams.date
+  const date = searchParams.date || ""
 
   let churches = []
   let feasts = []
+  const t = await getTranslations('SearchPage')
 
   if (query || date) {
     if (type === "all" || type === "churches") {
@@ -124,54 +122,68 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   return (
     <div className="min-h-screen bg-slate-50">
+      {/* Header */}
       <header className="bg-white border-b">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="text-xl font-bold">
-            Church Directory
+            {t("headerTitle")}
           </Link>
           <div className="flex items-center gap-4">
             <Button asChild variant="outline">
-              <Link href="/directory">Churches</Link>
+              <Link href="/directory">{t("navigationLinks.churches")}</Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href="/feasts">Feasts</Link>
+              <Link href="/feasts">{t("navigationLinks.feasts")}</Link>
             </Button>
             <Button asChild>
-              <Link href="/login">Login</Link>
+              <Link href="/login">{t("navigationLinks.login")}</Link>
             </Button>
           </div>
         </div>
       </header>
 
+      {/* Page Content */}
       <main className="container mx-auto py-8 px-4">
-        <h1 className="text-3xl font-bold mb-2">Search</h1>
-        <p className="text-muted-foreground mb-6">Find churches and feasts in our directory</p>
+        <h1 className="text-3xl font-bold mb-2">{t("pageTitle")}</h1>
+        <p className="text-muted-foreground mb-6">{t("pageDescription")}</p>
 
+        {/* Search Form */}
         <div className="max-w-2xl mx-auto mb-8">
           <SearchForm initialQuery={query} initialType={type} />
         </div>
 
+        {/* Conditional Search Results */}
         {query && (
           <div className="mb-6">
             <h2 className="text-xl font-semibold mb-2">
-              Search results for: <span className="font-normal italic">{query}</span>
+              {t("searchResultsTitle", { query })}
             </h2>
-            {!hasResults && <p className="text-muted-foreground">No results found. Try a different search term.</p>}
+            {!hasResults && (
+              <p className="text-muted-foreground">
+                {t("noResultsMessage")}
+              </p>
+            )}
           </div>
         )}
 
+        {/* Results Tabs */}
         {hasResults && (
           <Tabs defaultValue={activeTab} className="w-full">
             <TabsList className="mb-6">
-              <TabsTrigger value="all">All Results</TabsTrigger>
-              <TabsTrigger value="churches">Churches ({type === "feasts" ? 0 : churches.length})</TabsTrigger>
-              <TabsTrigger value="feasts">Feasts ({type === "churches" ? 0 : feasts.length})</TabsTrigger>
+              <TabsTrigger value="all">{t("tabs.allResults")}</TabsTrigger>
+              <TabsTrigger value="churches">
+                {t("tabs.churches", { count: type === "feasts" ? 0 : churches.length })}
+              </TabsTrigger>
+              <TabsTrigger value="feasts">
+                {t("tabs.feasts", { count: type === "churches" ? 0 : feasts.length })}
+              </TabsTrigger>
             </TabsList>
 
+            {/* All Results */}
             <TabsContent value="all" className="space-y-8">
               {churches.length > 0 && (
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">Churches</h3>
+                  <h3 className="text-lg font-semibold mb-4">{t("churchesTitle")}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {churches.slice(0, 3).map((church) => (
                       <Card key={church.id}>
@@ -186,12 +198,12 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                         </CardHeader>
                         <CardContent>
                           <p className="text-sm text-muted-foreground line-clamp-3">
-                            {church.description || "No description available."}
+                            {church.description || t("noDescription")}
                           </p>
                         </CardContent>
                         <CardFooter>
                           <Button asChild variant="outline" className="w-full">
-                            <Link href={`/directory/${church.id}`}>View Details</Link>
+                            <Link href={`/directory/${church.id}`}>{t("viewDetails")}</Link>
                           </Button>
                         </CardFooter>
                       </Card>
@@ -200,7 +212,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                   {churches.length > 3 && (
                     <div className="text-center mt-4">
                       <Button asChild variant="outline">
-                        <Link href={`/search?q=${query}&type=churches`}>View All {churches.length} Churches</Link>
+                        <Link href={`/search?q=${query}&type=churches`}>
+                          {t("viewAllChurches", { count: churches.length })}
+                        </Link>
                       </Button>
                     </div>
                   )}
@@ -209,7 +223,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
               {feasts.length > 0 && (
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">Feasts</h3>
+                  <h3 className="text-lg font-semibold mb-4">{t("feastsTitle")}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {feasts.slice(0, 3).map((feast) => (
                       <Card key={feast.id}>
@@ -217,17 +231,17 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                           <CardTitle>{feast.saintName}</CardTitle>
                           <CardDescription className="flex items-center gap-1">
                             <Calendar className="h-3.5 w-3.5" />
-                            {formatDate(feast.commemorationDate)}
+                            <FormattedDate date={feast.commemorationDate} />
                           </CardDescription>
                         </CardHeader>
                         <CardContent>
                           <p className="text-sm text-muted-foreground line-clamp-3">
-                            {feast.description || "No description available."}
+                            {feast.description || t("noDescription")}
                           </p>
                         </CardContent>
                         <CardFooter>
                           <Button asChild variant="outline" className="w-full">
-                            <Link href={`/feasts/${feast.id}`}>View Details</Link>
+                            <Link href={`/feasts/${feast.id}`}>{t("viewDetails")}</Link>
                           </Button>
                         </CardFooter>
                       </Card>
@@ -236,7 +250,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                   {feasts.length > 3 && (
                     <div className="text-center mt-4">
                       <Button asChild variant="outline">
-                        <Link href={`/search?q=${query}&type=feasts`}>View All {feasts.length} Feasts</Link>
+                        <Link href={`/search?q=${query}&type=feasts`}>
+                          {t("viewAllFeasts", { count: feasts.length })}
+                        </Link>
                       </Button>
                     </div>
                   )}
@@ -244,6 +260,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               )}
             </TabsContent>
 
+            {/* Churches Tab */}
             <TabsContent value="churches">
               {churches.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -258,24 +275,25 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                           </CardDescription>
                         )}
                       </CardHeader>
-                      <CardContent className="space-y-4">
+                      <CardContent>
                         <p className="text-sm text-muted-foreground line-clamp-3">
-                          {church.description || "No description available."}
+                          {church.description || t("noDescription")}
                         </p>
                       </CardContent>
                       <CardFooter>
                         <Button asChild variant="outline" className="w-full">
-                          <Link href={`/directory/${church.id}`}>View Details</Link>
+                          <Link href={`/directory/${church.id}`}>{t("viewDetails")}</Link>
                         </Button>
                       </CardFooter>
                     </Card>
                   ))}
                 </div>
               ) : (
-                <p className="text-muted-foreground">No churches found matching your search criteria.</p>
+                <p className="text-muted-foreground">{t("noChurchesFound")}</p>
               )}
             </TabsContent>
 
+            {/* Feasts Tab */}
             <TabsContent value="feasts">
               {feasts.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -285,29 +303,29 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                         <CardTitle>{feast.saintName}</CardTitle>
                         <CardDescription className="flex items-center gap-1">
                           <Calendar className="h-3.5 w-3.5" />
-                          {formatDate(feast.commemorationDate)}
+                          <FormattedDate date={feast.commemorationDate} />
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
                         <p className="text-sm text-muted-foreground line-clamp-3">
-                          {feast.description || "No description available."}
+                          {feast.description || t("noDescription")}
                         </p>
                       </CardContent>
                       <CardFooter>
                         <Button asChild variant="outline" className="w-full">
-                          <Link href={`/feasts/${feast.id}`}>View Details</Link>
+                          <Link href={`/feasts/${feast.id}`}>{t("viewDetails")}</Link>
                         </Button>
                       </CardFooter>
                     </Card>
                   ))}
                 </div>
               ) : (
-                <p className="text-muted-foreground">No feasts found matching your search criteria.</p>
+                <p className="text-muted-foreground">{t("noFeastsFound")}</p>
               )}
             </TabsContent>
           </Tabs>
         )}
       </main>
     </div>
-  )
+  );
 }

@@ -12,10 +12,11 @@ async function getUserFromRequest(request: NextRequest) {
   }
 
   try {
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET || "your-secret-key")
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET || "my-secret-key")
     const { payload } = await jwtVerify(token, secret)
     return payload
-  } catch (error) {
+  } catch (error: any) {
+    console.log(error)
     return null
   }
 }

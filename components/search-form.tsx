@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Search } from "lucide-react"
+import { useLocale, useTranslations } from "next-intl"
 
 interface SearchFormProps {
   initialQuery: string
@@ -18,9 +19,11 @@ interface SearchFormProps {
 
 export function SearchForm({ initialQuery, initialType, initialDate }: SearchFormProps) {
   const router = useRouter()
+  const locale = useLocale()
   const [query, setQuery] = useState(initialQuery)
   const [type, setType] = useState(initialType || "all")
   const [date, setDate] = useState(initialDate || "")
+  const t = useTranslations("SearchPage")
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -41,7 +44,7 @@ export function SearchForm({ initialQuery, initialType, initialDate }: SearchFor
       params.set("date", date)
     }
 
-    router.push(`/search?${params.toString()}`)
+    router.push(`/${locale}/search?${params.toString()}`)
   }
 
   return (
@@ -51,30 +54,35 @@ export function SearchForm({ initialQuery, initialType, initialDate }: SearchFor
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Search churches, feasts, saints..."
+            placeholder={t("placeholders.search")}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="pl-10"
           />
         </div>
         <div className="w-40">
-          <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} placeholder="Filter by date" />
+          <Input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            placeholder={t("placeholders.date")}
+          />
         </div>
-        <Button type="submit">Search</Button>
+        <Button type="submit">{t("buttons.search")}</Button>
       </div>
 
       <RadioGroup value={type} onValueChange={setType} className="flex space-x-4">
         <div className="flex items-center space-x-2">
           <RadioGroupItem value="all" id="all" />
-          <Label htmlFor="all">All</Label>
+          <Label htmlFor="all">{t("radio.all")}</Label>
         </div>
         <div className="flex items-center space-x-2">
           <RadioGroupItem value="churches" id="churches" />
-          <Label htmlFor="churches">Churches</Label>
+          <Label htmlFor="churches">{t("radio.churches")}</Label>
         </div>
         <div className="flex items-center space-x-2">
           <RadioGroupItem value="feasts" id="feasts" />
-          <Label htmlFor="feasts">Feasts</Label>
+          <Label htmlFor="feasts">{t("radio.feasts")}</Label>
         </div>
       </RadioGroup>
     </form>
