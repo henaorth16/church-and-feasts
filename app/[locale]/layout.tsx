@@ -3,6 +3,7 @@ import "../globals.css";
 import { NextIntlClientProvider } from "next-intl";
 // import { getMessages } from "next-intl/server";
 import { getLocale } from "next-intl/server";
+import { isMiddlewareFile } from "next/dist/build/utils";
 
 export const metadata: Metadata = {
   title: "debrat ena bealat",
@@ -12,7 +13,6 @@ export const metadata: Metadata = {
   generator: "Next.js",
   applicationName: "debrat ena bealat",
 };
-
 export default async function RootLayout({
   children,
   // params: { locale },
