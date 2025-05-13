@@ -10,11 +10,10 @@ import {
 } from "@/components/ui/card";
 import { MapPin, Calendar, Search } from "lucide-react";
 import { prisma } from "@/lib/prisma";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import FormattedDate from "@/components/formatted-date";
 import { Select } from "@/components/ui/select";
 import LanguageToggler from "@/components/languageToggler";
-
 
 // const t = useTranslations("HomePage");
 
@@ -70,7 +69,9 @@ async function getTodaysFeasts() {
 
 export default async function Home(
   //get the current locale from the url
-  { params }: {
+  {
+    params,
+  }: {
     params: { locale: string };
   }
 ) {
@@ -81,8 +82,8 @@ export default async function Home(
     getUpcomingFeasts(),
     getTodaysFeasts(),
   ]);
+  const localeCurrent = await getLocale();
 
-  
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="border-b">
@@ -95,24 +96,25 @@ export default async function Home(
               <Link href="/directory">{t("nav.churches")}</Link>
             </Button>
             {/* add a select option to choose the language en or am */}
-            
+
             <Button asChild variant="outline">
               <Link href="/feasts">{t("nav.feasts")}</Link>
             </Button>
             <Button asChild>
               <Link href="/login">{t("nav.login")}</Link>
             </Button>
-            <LanguageToggler/>
+            <LanguageToggler />
           </div>
         </div>
       </header>
-  
+
       {/* Hero Section */}
       <section
         className="text-white py-32"
         style={{
           backgroundColor: "rgba(0, 0, 0, 0.78)",
-          backgroundImage: "url('https://www.gpsmycity.com/img/gd_cover/5205.jpg')",
+          backgroundImage:
+            "url('https://www.gpsmycity.com/img/gd_cover/5205.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "top",
           backgroundRepeat: "no-repeat",
@@ -121,7 +123,9 @@ export default async function Home(
       >
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl font-bold mb-4">{t("home.title")}</h1>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">{t("home.description")}</p>
+          <p className="text-xl mb-8 max-w-2xl mx-auto">
+            {t("home.description")}
+          </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               asChild
@@ -147,13 +151,15 @@ export default async function Home(
           </div>
         </div>
       </section>
-  
+
       {/* Today's Feasts */}
       {todaysFeasts.length > 0 && (
         <section className="py-8 bg-slate-100">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">{t("home.todaysCommemorations")}</h2>
+              <h2 className="text-2xl font-bold">
+                {t("home.todaysCommemorations")}
+              </h2>
               <Button asChild variant="outline">
                 <Link href="/directory">{t("nav.churches")}</Link>
               </Button>
@@ -162,13 +168,15 @@ export default async function Home(
               </Button>
               <Button asChild variant="ghost">
                 <Link
-                  href={`/feasts?date=${new Date().toISOString().split("T")[0]}`}
+                  href={`/feasts?date=${
+                    new Date().toISOString().split("T")[0]
+                  }`}
                 >
                   {t("home.viewAll")}
                 </Link>
               </Button>
             </div>
-  
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {todaysFeasts.map((feast) => (
                 <Card key={feast.id}>
@@ -176,8 +184,7 @@ export default async function Home(
                     <CardTitle>{feast.saintName}</CardTitle>
                     <CardDescription className="flex items-center gap-1">
                       <Calendar className="h-3.5 w-3.5" />
-                      <FormattedDate date={feast.commemorationDate}
-                      />
+                      <FormattedDate date={feast.commemorationDate} />
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -187,14 +194,18 @@ export default async function Home(
                     {feast.churchFeasts.length > 0 && (
                       <div className="mt-2">
                         <p className="text-sm font-medium">
-                          {t("home.celebratedAt", { count: feast.churchFeasts.length })}
+                          {t("home.celebratedAt", {
+                            count: feast.churchFeasts.length,
+                          })}
                         </p>
                       </div>
                     )}
                   </CardContent>
                   <CardFooter>
                     <Button asChild variant="outline" className="w-full">
-                      <Link href={`/feasts/${feast.id}`}>{t("home.viewDetails")}</Link>
+                      <Link href={`/feasts/${feast.id}`}>
+                        {t("home.viewDetails")}
+                      </Link>
                     </Button>
                   </CardFooter>
                 </Card>
@@ -203,7 +214,7 @@ export default async function Home(
           </div>
         </section>
       )}
-  
+
       {/* Featured Churches */}
       <section className="py-12">
         <div className="container mx-auto px-4">
@@ -213,7 +224,7 @@ export default async function Home(
               <Link href="/directory">{t("home.viewAll")}</Link>
             </Button>
           </div>
-  
+
           {churches.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-muted-foreground">{t("home.noDescription")}</p>
@@ -223,7 +234,12 @@ export default async function Home(
               {churches.map((church) => (
                 <Card key={church.id}>
                   <CardHeader>
-                    <CardTitle>{church.name}</CardTitle>
+                    {localeCurrent === "am" ? (
+                      <CardTitle>{church.nameAmh}</CardTitle>
+                    ) : (
+                      <CardTitle>{church.name}</CardTitle>
+                    )}
+
                     {church.address && (
                       <CardDescription className="flex items-center gap-1 text-primary">
                         <MapPin className="h-3.5 w-3.5" />
@@ -249,7 +265,7 @@ export default async function Home(
           )}
         </div>
       </section>
-  
+
       {/* Upcoming Feasts */}
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
@@ -259,7 +275,7 @@ export default async function Home(
               <Link href="/feasts">{t("home.viewAll")}</Link>
             </Button>
           </div>
-  
+
           {upcomingFeasts.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-muted-foreground">{t("home.noDescription")}</p>
@@ -272,8 +288,7 @@ export default async function Home(
                     <CardTitle>{feast.saintName}</CardTitle>
                     <CardDescription className="flex items-center gap-1">
                       <Calendar className="h-3.5 w-3.5" />
-                      <FormattedDate date={feast.commemorationDate}
-                      />
+                      <FormattedDate date={feast.commemorationDate} />
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -283,7 +298,9 @@ export default async function Home(
                   </CardContent>
                   <CardFooter>
                     <Button asChild variant="outline" className="w-full">
-                      <Link href={`/feasts/${feast.id}`}>{t("home.viewDetails")}</Link>
+                      <Link href={`/feasts/${feast.id}`}>
+                        {t("home.viewDetails")}
+                      </Link>
                     </Button>
                   </CardFooter>
                 </Card>
@@ -292,7 +309,7 @@ export default async function Home(
           )}
         </div>
       </section>
-  
+
       {/* Search Section */}
       <section className="py-12 bg-slate-100">
         <div className="container mx-auto px-4 text-center">
@@ -312,5 +329,4 @@ export default async function Home(
       </section>
     </div>
   );
-  
 }
