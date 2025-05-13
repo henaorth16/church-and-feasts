@@ -15,6 +15,7 @@ CREATE TABLE `User` (
 CREATE TABLE `Church` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
+    `nameAmh` VARCHAR(191) NOT NULL,
     `address` VARCHAR(191) NULL,
     `email` VARCHAR(191) NULL,
     `phone` VARCHAR(191) NULL,

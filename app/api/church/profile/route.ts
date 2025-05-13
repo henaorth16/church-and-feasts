@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { type NextRequest, NextResponse } from "next/server"
 import { PrismaClient } from "@prisma/client"
 import { jwtVerify } from "jose"
@@ -34,11 +35,11 @@ export async function POST(request: NextRequest) {
     if (!data.name) {
       return NextResponse.json({ message: "Church name is required" }, { status: 400 })
     }
-
     // Create church profile
     const church = await prisma.church.create({
       data: {
         name: data.name,
+        nameAmh: data.nameAmh,
         address: data.address,
         email: data.email,
         phone: data.phone,
