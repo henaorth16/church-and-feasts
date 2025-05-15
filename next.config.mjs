@@ -5,7 +5,6 @@ const withNextIntl = createNextIntlPlugin({
   messagesDir: './messages',
 });
 const nextConfig = {
-  output: 'export',
   eslint: {
     ignoreDuringBuilds: true,
   },
