@@ -3,6 +3,8 @@ import "../globals.css";
 import { NextIntlClientProvider } from "next-intl";
 // import { getMessages } from "next-intl/server";
 import { getLocale } from "next-intl/server";
+import 'leaflet/dist/leaflet.css';
+
 
 export const metadata: Metadata = {
   title: "debrat ena bealat",

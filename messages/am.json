@@ -23,41 +23,41 @@
       "searchButton": "መዝገቡን ፈልግ"
     }
   },
- "SearchPage": {
-      "headerTitle": "የቤተክርስቲያን መዝገብ",
-      "navigationLinks": {
-        "churches": "ደብራት",
-        "feasts": "በዓላት",
-        "login": "ግባ"
-      },
-      "pageTitle": "ፈልግ",
-      "pageDescription": "ቤተክርስቲያን ወይም በዓል በመዝገቡ ውስጥ ፈልግ",
-      "searchResultsTitle": "የፈለግከው ውጤት: {query}",
-      "noResultsMessage": "የተገኘ ውጤት የለም። ሌላ የፈለግከውን ቃል ይሞክሩ።",
-      "tabs": {
-        "allResults": "ሁሉም ውጤቶች",
-        "churches": "ደብራት ({count})",
-        "feasts": "በዓላት ({count})"
-      },
-      "churchesTitle": "ደብራት",
-      "feastsTitle": "በዓላት",
-      "noDescription": "መግለጫ አልተገኘም።",
-      "viewDetails": "ዝርዝሮችን ይመልከቱ",
-      "viewAllChurches": "ሁሉንም የተገኙ ቤተክርስቲያኖች ይመልከቱ ({count})",
-      "viewAllFeasts": "ሁሉንም የተገኙ በዓላት ይመልከቱ ({count})",
-      "noChurchesFound": "የተገኙ ቤተክርስቲያኖች የለም የፈለግከው መሠረት።",
-      "noFeastsFound": "የተገኙ በዓላት የለም የፈለግከው መሠረት።",
-      "placeholders": {
-    "search": "ቤተክርስቲያን ወይም በዓል ፈልግ",
-    "date": "ቀን ወይም ወቅት ይጻፉ"
-  },
-  "buttons": {
-    "search": "ፈልግ"
-  },
-  "radio": {
-    "all": "ሁሉንም",
-    "churches": "ደብራት",
-    "feasts": "በዓላት"
-  }
+  "SearchPage": {
+    "headerTitle": "የቤተክርስቲያን መዝገብ",
+    "navigationLinks": {
+      "churches": "ደብራት",
+      "feasts": "በዓላት",
+      "login": "ግባ"
+    },
+    "pageTitle": "ፈልግ",
+    "pageDescription": "ቤተክርስቲያን ወይም በዓል በመዝገቡ ውስጥ ፈልግ",
+    "searchResultsTitle": "የፈለግከው ውጤት: {query}",
+    "noResultsMessage": "የተገኘ ውጤት የለም። ሌላ የፈለግከውን ቃል ይሞክሩ።",
+    "tabs": {
+      "allResults": "ሁሉም ውጤቶች",
+      "churches": "ደብራት ({count})",
+      "feasts": "በዓላት ({count})"
+    },
+    "churchesTitle": "ደብራት",
+    "feastsTitle": "በዓላት",
+    "noDescription": "መግለጫ አልተገኘም።",
+    "viewDetails": "ዝርዝሮችን ይመልከቱ",
+    "viewAllChurches": "ሁሉንም የተገኙ ቤተክርስቲያኖች ይመልከቱ ({count})",
+    "viewAllFeasts": "ሁሉንም የተገኙ በዓላት ይመልከቱ ({count})",
+    "noChurchesFound": "የተገኙ ቤተክርስቲያኖች የለም የፈለግከው መሠረት።",
+    "noFeastsFound": "የተገኙ በዓላት የለም የፈለግከው መሠረት።",
+    "placeholders": {
+      "search": "ቤተክርስቲያን ወይም በዓል ፈልግ",
+      "date": "ቀን ወይም ወቅት ይጻፉ"
+    },
+    "buttons": {
+      "search": "ፈልግ"
+    },
+    "radio": {
+      "all": "ሁሉንም",
+      "churches": "ደብራት",
+      "feasts": "በዓላት"
     }
+  }
 }

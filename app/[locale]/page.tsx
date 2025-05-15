@@ -14,6 +14,7 @@ import { getTranslations } from "next-intl/server";
 import FormattedDate from "@/components/formatted-date";
 import { Select } from "@/components/ui/select";
 import LanguageToggler from "@/components/languageToggler";
+import HeroSection from "@/components/HeroSection";
 
 
 // const t = useTranslations("HomePage");
@@ -108,45 +109,7 @@ export default async function Home(
       </header>
   
       {/* Hero Section */}
-      <section
-        className="text-white py-32"
-        style={{
-          backgroundColor: "rgba(0, 0, 0, 0.78)",
-          backgroundImage: "url('https://www.gpsmycity.com/img/gd_cover/5205.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "top",
-          backgroundRepeat: "no-repeat",
-          backgroundBlendMode: "multiply",
-        }}
-      >
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl font-bold mb-4">{t("home.title")}</h1>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">{t("home.description")}</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              asChild
-              size="lg"
-              className="bg-white text-slate-800 hover:bg-slate-100"
-            >
-              <Link href="/directory">
-                <MapPin className="mr-2 h-5 w-5" />
-                {t("home.findChurches")}
-              </Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="text-white bg-transparent border-white"
-            >
-              <Link href="/feasts">
-                <Calendar className="mr-2 h-5 w-5" />
-                {t("home.viewFeasts")}
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+      <HeroSection/>
   
       {/* Today's Feasts */}
       {todaysFeasts.length > 0 && (
