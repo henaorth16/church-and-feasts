@@ -9,13 +9,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { MapPin, Calendar, Search } from "lucide-react";
-import { prisma } from "@/lib/prisma";
+// import { prisma } from "@/lib/prisma";
+//import prisma client
 import { getTranslations } from "next-intl/server";
 import FormattedDate from "@/components/formatted-date";
 import { Select } from "@/components/ui/select";
 import LanguageToggler from "@/components/languageToggler";
 import HeroSection from "@/components/HeroSection";
+import { PrismaClient } from "@prisma/client";
+import Footer from "@/components/footer";
 
+const prisma = new PrismaClient()
 
 // const t = useTranslations("HomePage");
 
@@ -273,6 +277,8 @@ export default async function Home(
           </div>
         </div>
       </section>
+      {/*footer*/}
+      <Footer/>
     </div>
   );
   

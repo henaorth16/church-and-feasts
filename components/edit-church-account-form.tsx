@@ -28,7 +28,7 @@ interface EditChurchAccountFormProps {
 
 export function EditChurchAccountForm({ account }: EditChurchAccountFormProps) {
   const router = useRouter()
-  const [username, setUsername] = useState(account.username)
+  const [username, setUsername] = useState<string>(account.username)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -40,7 +40,7 @@ export function EditChurchAccountForm({ account }: EditChurchAccountFormProps) {
     setIsLoading(true)
 
     try {
-      const response = await fetch(`/api/admin/church-account/edit/${account.id}`, {
+      const response = await fetch(`/api/admin/church-account/${account.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
