@@ -9,7 +9,7 @@ import { ChurchProfileForm } from "@/components/church-profile-form"
 const prisma = new PrismaClient()
 
 async function getUserFromToken() {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const token = cookieStore.get("token")?.value
 
   if (!token) {

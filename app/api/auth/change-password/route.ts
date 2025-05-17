@@ -7,6 +7,7 @@ const prisma = new PrismaClient()
 
 async function getUserFromRequest(request: NextRequest) {
   const token = request.cookies.get("token")?.value
+  
 
   if (!token) {
     return null

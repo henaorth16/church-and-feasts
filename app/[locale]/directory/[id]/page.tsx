@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Mail, Phone, Users, ArrowLeft, Calendar } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import Map from "@/components/Map";
+import NavPublic from "@/components/nav-public";
 
 const prisma = new PrismaClient();
 
@@ -60,24 +61,7 @@ export default async function ChurchDetailsPage({
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold">
-            Church Directory
-          </Link>
-          <div className="flex items-center gap-4">
-            <Button asChild variant="outline">
-              <Link href="/directory">Churches</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/feasts">Feasts</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/login">Login</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <NavPublic/>
       <main className="container mx-auto py-8 px-4">
         <div className="mb-6">
           <Button asChild variant="ghost" className="pl-0">
@@ -126,7 +110,6 @@ export default async function ChurchDetailsPage({
                 {/* <iframe
                   width="100%"
                   height="100%"
-                  frameBorder="0"
                   style={{ border: 0 }}
                   src={`https://www.google.com/maps?q=${church.latitude},${church.longitude}&z=15&output=embed`}
                   allowFullScreen

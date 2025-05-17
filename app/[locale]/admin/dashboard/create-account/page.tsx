@@ -5,7 +5,7 @@ import { AdminDashboardHeader } from "@/components/admin-dashboard-header"
 import { CreateChurchAccountForm } from "@/components/create-church-account-form"
 
 async function getUserFromToken() {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const token = cookieStore.get("token")?.value
 
   if (!token) {

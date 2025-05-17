@@ -8,7 +8,7 @@ import { ResetPasswordForm } from "@/components/reset-password-form"
 const prisma = new PrismaClient()
 
 async function getUserFromToken() {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const token = cookieStore.get("token")?.value
 
   if (!token) {

@@ -1,15 +1,19 @@
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { jwtVerify } from "jose"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { ChangePasswordForm } from "@/components/change-password-form"
+import { getLocale } from "next-intl/server"
+
+
+const locale = getLocale();
 
 async function getUserFromToken() {
   const cookieStore = await cookies()
   const token = cookieStore.get("token")?.value
 
   if (!token) {
-    return null
+    return notFound()
   }
 
   try {
@@ -21,11 +25,13 @@ async function getUserFromToken() {
   }
 }
 
+
+
 export default async function ChangePasswordPage() {
   const user = await getUserFromToken()
 
   if (!user || user.role !== "CHURCH") {
-    redirect("/login")
+    redirect(`/login`)
   }
 
   return (

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Calendar } from "lucide-react"
 import { formatDate } from "@/lib/utils"
 import { FeastsFilter } from "@/components/feasts-filter"
+import NavPublic from "@/components/nav-public"
 
 const prisma = new PrismaClient()
 
@@ -79,24 +80,7 @@ export default async function FeastsPage({ searchParams }: FeastsPageProps) {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold">
-            Church Directory
-          </Link>
-          <div className="flex items-center gap-4">
-            <Button asChild variant="outline">
-              <Link href="/directory">Churches</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/search">Search</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/login">Login</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <NavPublic/>
 
       <main className="container mx-auto py-8 px-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">

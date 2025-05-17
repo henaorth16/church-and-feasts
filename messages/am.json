@@ -1,11 +1,12 @@
 {
+  "nav": {
+    "title": "የቤተክርስቲያን መዝገብ",
+    "churches": "ደብራት",
+    "feasts": "በዓላት",
+    "search": "ፈልግ",
+    "login": "ግባ"
+  },
   "HomePage": {
-    "nav": {
-      "directory": "የቤተክርስቲያን መዝገብ",
-      "churches": "ደብራት",
-      "feasts": "በዓላት",
-      "login": "ግባ"
-    },
     "home": {
       "title": "የቤተክርስቲያን መዝገብ እና የበዓል መቁጠሪያ",
       "description": "በአካባቢዎ ያሉ ቤተክርስቲያናትን ያግኙ እና የቅዱሳንን በዓላትን ይውቁ።",
@@ -18,6 +19,7 @@
       "viewDetails": "ዝርዝሮችን ይመልከቱ",
       "featuredChurches": "የተለየ መስሎ የቀረቡ ቤተክርስቲያኖች",
       "upcomingFeasts": "የሚመጡ በዓላት",
+      "churches": "ደብራት",
       "searchPrompt": "ልዩ ነገር ትፈልጋለህ?",
       "searchHint": "በስም፣ ቦታ ወይም ቀን በመጠቀም ቤተክርስቲያን ወይም በዓል ፈልግ።",
       "searchButton": "መዝገቡን ፈልግ"
@@ -59,5 +61,20 @@
       "churches": "ደብራት",
       "feasts": "በዓላት"
     }
+  },
+  "ChurchDirectoryPage": {
+    "headerTitle": "የቤተክርስቲያን መዝገብ",
+    "navigationLinks": {
+      "churches": "ደብራት",
+      "feasts": "በዓላት",
+      "login": "ግባ"
+    },
+    "clearFilters": "የተጠቀሱ መረጃዎችን ይወግዱ",
+    "pageTitle": "የቤተክርስቲያን መዝገብ",
+    "viewDetails": "ዝርዝሮችን ይመልከቱ",
+    "noChurchesFound": "የተገኙ ቤተክርስቲያኖች የለም የፈለግከው መሠረት።",
+    "pageDescription": "ቤተክርስቲያን በመዝገቡ ውስጥ ፈልግ",
+    "searchPlaceholder": "ቤተክርስቲያን ወይም በዓላትን ፈልግ...",
+    "servants": "አገልጋዮች"
   }
 }

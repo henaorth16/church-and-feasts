@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Calendar, ArrowLeft, MapPin } from "lucide-react"
 import { formatDate } from "@/lib/utils"
+import NavPublic from "@/components/nav-public"
 
 const prisma = new PrismaClient()
 
@@ -36,24 +37,7 @@ export default async function FeastDetailsPage({
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold">
-            Church Directory
-          </Link>
-          <div className="flex items-center gap-4">
-            <Button asChild variant="outline">
-              <Link href="/directory">Churches</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/feasts">Feasts</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/login">Login</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <NavPublic/>
 
       <main className="container mx-auto py-8 px-4">
         <div className="mb-6">

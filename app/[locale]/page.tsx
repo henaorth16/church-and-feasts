@@ -18,6 +18,7 @@ import LanguageToggler from "@/components/languageToggler";
 import HeroSection from "@/components/HeroSection";
 import { PrismaClient } from "@prisma/client";
 import Footer from "@/components/footer";
+import NavPublic from "@/components/nav-public";
 
 const prisma = new PrismaClient()
 
@@ -90,27 +91,7 @@ export default async function Home(
   
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold">
-            {t("nav.directory")}
-          </Link>
-          <div className="flex items-center gap-4">
-            <Button asChild variant="outline">
-              <Link href="/directory">{t("nav.churches")}</Link>
-            </Button>
-            {/* add a select option to choose the language en or am */}
-            
-            <Button asChild variant="outline">
-              <Link href="/feasts">{t("nav.feasts")}</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/login">{t("nav.login")}</Link>
-            </Button>
-            <LanguageToggler/>
-          </div>
-        </div>
-      </header>
+      <NavPublic/>
   
       {/* Hero Section */}
       <HeroSection/>
@@ -122,7 +103,7 @@ export default async function Home(
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold">{t("home.todaysCommemorations")}</h2>
               <Button asChild variant="outline">
-                <Link href="/directory">{t("nav.churches")}</Link>
+                <Link href="/directory">{t("churches")}</Link>
               </Button>
               <Button asChild variant="outline">
                 <Link href="/feasts">{t("nav.feasts")}</Link>

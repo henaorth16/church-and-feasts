@@ -1,4 +1,3 @@
-//@ts-nocheck
 import Link from "next/link"
 import { PrismaClient } from "@prisma/client"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
@@ -8,7 +7,8 @@ import { MapPin, Calendar } from "lucide-react"
 import { SearchForm } from "@/components/search-form"
 import { formatDate } from "@/lib/utils"
 import FormattedDate from "@/components/formatted-date"
-import { getTranslations } from "next-intl/server"
+import { getLocale, getTranslations } from "next-intl/server"
+import NavPublic from "@/components/nav-public"
 
 const prisma = new PrismaClient()
 
@@ -19,7 +19,7 @@ interface SearchPageProps {
     date?: string
   }
 }
-
+const locale = getLocale()
 async function searchChurches(query: string) {
   if (!query) return []
 
@@ -103,8 +103,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const type = searchParams.type || "all"
   const date = searchParams.date || ""
 
-  let churches = []
-  let feasts = []
+  let churches: Awaited<ReturnType<typeof searchChurches>> = []
+  let feasts: Awaited<ReturnType<typeof searchFeasts>> = []
   const t = await getTranslations('SearchPage')
 
   if (query || date) {
@@ -122,25 +122,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold">
-            {t("headerTitle")}
-          </Link>
-          <div className="flex items-center gap-4">
-            <Button asChild variant="outline">
-              <Link href="/directory">{t("navigationLinks.churches")}</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/feasts">{t("navigationLinks.feasts")}</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/login">{t("navigationLinks.login")}</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <NavPublic />
 
       {/* Page Content */}
       <main className="container mx-auto py-8 px-4">
@@ -203,7 +185,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                         </CardContent>
                         <CardFooter>
                           <Button asChild variant="outline" className="w-full">
-                            <Link href={`/directory/${church.id}`}>{t("viewDetails")}</Link>
+                            <Link href={`/${locale}/directory/${church.id}`}>{t("viewDetails")}</Link>
                           </Button>
                         </CardFooter>
                       </Card>
@@ -212,7 +194,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                   {churches.length > 3 && (
                     <div className="text-center mt-4">
                       <Button asChild variant="outline">
-                        <Link href={`/search?q=${query}&type=churches`}>
+                        <Link href={`/${locale}/search?q=${query}&type=churches`}>
                           {t("viewAllChurches", { count: churches.length })}
                         </Link>
                       </Button>
@@ -241,7 +223,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                         </CardContent>
                         <CardFooter>
                           <Button asChild variant="outline" className="w-full">
-                            <Link href={`/feasts/${feast.id}`}>{t("viewDetails")}</Link>
+                            <Link href={`/${locale}/feasts/${feast.id}`}>{t("viewDetails")}</Link>
                           </Button>
                         </CardFooter>
                       </Card>
@@ -250,7 +232,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                   {feasts.length > 3 && (
                     <div className="text-center mt-4">
                       <Button asChild variant="outline">
-                        <Link href={`/search?q=${query}&type=feasts`}>
+                        <Link href={`/${locale}/search?q=${query}&type=feasts`}>
                           {t("viewAllFeasts", { count: feasts.length })}
                         </Link>
                       </Button>
@@ -282,7 +264,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                       </CardContent>
                       <CardFooter>
                         <Button asChild variant="outline" className="w-full">
-                          <Link href={`/directory/${church.id}`}>{t("viewDetails")}</Link>
+                          <Link href={`/${locale}/directory/${church.id}`}>{t("viewDetails")}</Link>
                         </Button>
                       </CardFooter>
                     </Card>
@@ -313,7 +295,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                       </CardContent>
                       <CardFooter>
                         <Button asChild variant="outline" className="w-full">
-                          <Link href={`/feasts/${feast.id}`}>{t("viewDetails")}</Link>
+                          <Link href={`/${locale}/feasts/${feast.id}`}>{t("viewDetails")}</Link>
                         </Button>
                       </CardFooter>
                     </Card>
