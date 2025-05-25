@@ -1,11 +1,12 @@
 {
   "nav": {
-      "title": "Church Directory",
-      "churches": "Churches",
-      "feasts": "Feasts",
-      "search": "Search",
-      "login": "Login"
-    },
+    "home": "Home",
+    "title": "Church Directory",
+    "churches": "Churches",
+    "feasts": "Feasts",
+    "search": "Search",
+    "login": "Login"
+  },
   "HomePage": {
     "home": {
       "title": "Church Directory & Feast Calendar",
@@ -20,6 +21,7 @@
       "featuredChurches": "Featured Churches",
       "upcomingFeasts": "Upcoming Feasts",
       "churches": "Churches",
+      "feasts": "Feasts",
       "searchPrompt": "Looking for Something Specific?",
       "searchHint": "Search for churches or feasts by name, location, or date.",
       "searchButton": "Search Directory"
@@ -76,5 +78,33 @@
     "pageDescription": "Find churches in our directory",
     "searchPlaceholder": "Search churches...",
     "servants": "Servants"
+  },
+  "feastPage": {
+ 
+    "pageTitle": "Feast Calendar",
+    "pageDescription": "Browse saint commemorations throughout the year",
+    "viewDetails": "View Details",
+    "noFeastsFound": "No feasts found matching your search criteria.",
+    "searchPlaceholder": "Search feasts...",
+    "feastsFound": "Found {feasts.length} feast(s) on this date",
+    "clearFilters": "Clear Filters",
+    "feastsOn": "Feasts on",
+    "celebratedAt": "Celebrated at: ",
+    "more": "More churches",
+    "months": {
+      "allMonths": "All Months",
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    }
   }
 }

@@ -46,7 +46,8 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CheckCircle2, AlertCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
-
+//@ts-ignore
+import { toGregorian } from 'ethiopian-date';
 interface Feast {
   id: string;
   saintName: string;
@@ -67,6 +68,28 @@ interface ChurchFeastsListProps {
   allFeasts: Feast[];
   userId: string;
 }
+const ethiopianMonths = [
+  "መስከረም",
+  "ጥቅምት",
+  "ኅዳር",
+  "ታኅሳስ",
+  "ጥር",
+  "የካቲት",
+  "መጋቢት",
+  "ሚያዝያ",
+  "ግንቦት",
+  "ሰኔ",
+  "ሐምሌ",
+  "ነሐሴ",
+  "ጳጉሜን",
+];
+const getDaysInEthiopianMonth = (month: number) => {
+  // Months 1-12 have 30 days, Pagumē (13) has 5 or 6 days
+  if (month === 13) {
+    return Array.from({ length: 6 }, (_, i) => i + 1); // Handle leap years later if needed
+  }
+  return Array.from({ length: 30 }, (_, i) => i + 1);
+};
 
 export function ChurchFeastsList({
   churchFeasts,
@@ -88,19 +111,28 @@ export function ChurchFeastsList({
   const [newFeastName, setNewFeastName] = useState("");
   const [newFeastDate, setNewFeastDate] = useState("");
   const [newFeastDescription, setNewFeastDescription] = useState("");
-
+  const [month, setMonth] = useState<number>(1); // 1-based
+  const [day, setDay] = useState<number>(1);
+  const [converted, setConverted] = useState<Date | null>(null);
   // Filter out feasts that are already associated with the church
   const availableFeasts = allFeasts.filter(
     (feast) => !churchFeasts.some((cf) => cf.feastId === feast.id)
   );
 
+  // const handleConvert = () => {
+    
+  // };
+  // const thisYearDate = availableFeasts.
   // Group feasts by upcoming and past
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const upcomingFeasts = churchFeasts.filter(
-    (cf) => new Date(cf.feast.commemorationDate) >= today
-  );
+
+  const upcomingFeasts = churchFeasts.filter((cf) => {
+    const feastDate = new Date(cf.feast.commemorationDate);
+    feastDate.setFullYear(today.getFullYear());
+    return feastDate >= today;
+  });
 
   const pastFeasts = churchFeasts
     .filter((cf) => new Date(cf.feast.commemorationDate) < today)
@@ -212,49 +244,61 @@ export function ChurchFeastsList({
     setIsEditDialogOpen(true);
   }
 
-  async function handleCreateFeast() {
-    if (!newFeastName || !newFeastDate) {
-      setError("Feast name and date are required");
-      return;
-    }
-
-    setError("");
-    setSuccess("");
-    setIsSubmitting(true);
-
-    try {
-      const response = await fetch("/api/church/create-feast", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          saintName: newFeastName,
-          commemorationDate: newFeastDate,
-          description: newFeastDescription.trim() || null,
-          specialNotes: specialNotes.trim() || null,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to create feast");
-      }
-
-      setSuccess("Feast created and added to your church successfully");
-      setNewFeastName("");
-      setNewFeastDate("");
-      setNewFeastDescription("");
-      setSpecialNotes("");
-      setIsCreateFeastDialogOpen(false);
-      router.refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setIsSubmitting(false);
-    }
+ async function handleCreateFeast() {
+  const currentEthiopianYear = new Date().getFullYear() - 8;
+  let result = "";
+  try {
+    const grego = toGregorian(currentEthiopianYear, month, day);
+    result = new Date(grego[0], grego[1] - 1, grego[2]).toDateString();
+    console.log("New feast date:", result);
+  } catch (e) {
+    alert("Invalid Ethiopian date");
+    return;
   }
+
+  if (!newFeastName || !result) {
+    setError("Feast name and date are required");
+    return;
+  }
+
+  setError("");
+  setSuccess("");
+  setIsSubmitting(true);
+
+  try {
+    const response = await fetch("/api/church/create-feast", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        saintName: newFeastName,
+        commemorationDate: result,
+        description: newFeastDescription.trim() || null,
+        specialNotes: specialNotes.trim() || null,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to create feast");
+    }
+
+    setSuccess("Feast created and added to your church successfully");
+    setNewFeastName("");
+    setNewFeastDate("");
+    setNewFeastDescription("");
+    setSpecialNotes("");
+    setIsCreateFeastDialogOpen(false);
+    router.refresh();
+  } catch (err) {
+    setError(err instanceof Error ? err.message : "An error occurred");
+  } finally {
+    setIsSubmitting(false);
+  }
+}
+
 
   return (
     <div className="space-y-6">
@@ -306,15 +350,38 @@ export function ChurchFeastsList({
                     required
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="newFeastDate">Commemoration Date</Label>
-                  <Input
-                    id="newFeastDate"
-                    type="date"
-                    value={newFeastDate}
-                    onChange={(e) => setNewFeastDate(e.target.value)}
-                    required
-                  />
+                <div className="flex justify-evenly">
+                  <div>
+                    <label className="block mb-1">ወር (Month):</label>
+                    <select
+                      value={month}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                        setMonth(parseInt(e.target.value));
+                        setDay(1); // reset day when month changes
+                      }}
+                      className="border p-2 rounded"
+                    >
+                      {ethiopianMonths.map((name, i) => (
+                        <option key={i} value={i + 1}>
+                          {name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block mb-1">ቀን (Day):</label>
+                    <select
+                      value={day}
+                      onChange={(e) => setDay(parseInt(e.target.value))}
+                      className="border p-2 rounded"
+                    >
+                      {getDaysInEthiopianMonth(month).map((d) => (
+                        <option key={d} value={d}>
+                          {d}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="newFeastDescription">
@@ -351,7 +418,7 @@ export function ChurchFeastsList({
                 </Button>
                 <Button
                   onClick={handleCreateFeast}
-                  disabled={isSubmitting || !newFeastName || !newFeastDate}
+                  disabled={isSubmitting || !newFeastName|| !month || !day}
                 >
                   {isSubmitting ? "Creating..." : "Create Feast"}
                 </Button>
@@ -454,7 +521,7 @@ export function ChurchFeastsList({
                       {churchFeast.feast.saintName}
                     </TableCell>
                     <TableCell>
-                      {formatDate(churchFeast.feast.commemorationDate)}
+                      {formatDate(churchFeast.feast.commemorationDate, "am")}
                     </TableCell>
                     <TableCell>{churchFeast.specialNotes || "-"}</TableCell>
                     <TableCell className="text-right">
@@ -540,7 +607,7 @@ export function ChurchFeastsList({
                       {churchFeast.feast.saintName}
                     </TableCell>
                     <TableCell>
-                      {formatDate(churchFeast.feast.commemorationDate)}
+                      {formatDate(churchFeast.feast.commemorationDate, "am")}
                     </TableCell>
                     <TableCell>{churchFeast.specialNotes || "-"}</TableCell>
                     <TableCell className="text-right">

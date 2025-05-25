@@ -6,13 +6,14 @@ import LanguageToggler from "./languageToggler";
 import { usePathname } from "next/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import { MenuIcon } from "lucide-react";
+import { HomeIcon, MenuIcon } from "lucide-react";
+import { Church, Calendar, Search, LogIn } from "lucide-react";
 
 const links = [
-  { href: "/directory", label: "churches" },
-  { href: "/feasts", label: "feasts" },
-  { href: "/search", label: "search" },
-  { href: "/login", label: "login" },
+  { href: "/directory", label: "churches", icon: Church },
+  { href: "/feasts", label: "feasts", icon: Calendar },
+  { href: "/search", label: "search", icon: Search },
+  { href: "/login", label: "login", icon: LogIn },
 ];
 
 export default function NavPublic() {
@@ -36,17 +37,19 @@ export default function NavPublic() {
                 variant="ghost"
                 className={
                   pathName === `/${locale}${link.href}`
-                    ? "bg-primary-foreground"
+                    ? "bg-primary-foreground font-semibold"
                     : ""
                 }
               >
-                <Link href={`/${locale}/${link.href}`}>{t(link.label)}</Link>
+                <Link
+                  href={`/${locale}${link.href}`}
+                  className="flex items-center gap-1"
+                >
+                  <link.icon className="w-4 h-4" />
+                  {t(link.label)}
+                </Link>
               </Button>
             ))}
-            {/* <Button asChild>
-                  <Link href={`/${locale}/login`}>{t("login")}</Link>
-                </Button> */}
-
             <LanguageToggler />
           </div>
         </div>
@@ -55,7 +58,7 @@ export default function NavPublic() {
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="z-[999] lg:hidden">
-              <MenuIcon className="h-6 w-6 fixed" />
+              <MenuIcon className="h-6 w-6" />
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
@@ -63,18 +66,28 @@ export default function NavPublic() {
           <SheetContent side="left">
             {/* {logo */}
 
-            <div className="grid gap-2 py-6">
+            <div className="grid py-7">
+              <Link
+                href={`/${locale}`}
+                className="flex w-full items-center my-3 gap-2 font-semibold"
+                prefetch={false}
+              >
+                <HomeIcon className="w-5 h-5" />
+                {t("home")}
+              </Link>
+              <hr className="border-slate-300" />
               {links.map((item, idx) => (
-                <div key={idx}>
-                  <Link
-                    href={`/${locale}${item.href}`}
-                    className="flex w-full items-center text-primary font-semibold"
-                    prefetch={false}
-                  >
-                    {item.label}
-                  </Link>
-                  <hr className="border-slate-400" />
-                </div>
+                  <div key={idx}>
+                    <Link
+                      href={`/${locale}${item.href}`}
+                      className="flex w-full items-center my-3 gap-2 font-semibold"
+                      prefetch={false}
+                    >
+                      <item.icon className="w-5 h-5" />
+                      {t(item.label)}
+                    </Link>
+                    <hr className="border-slate-300" />
+                  </div>
               ))}
               <div className="flex items-center gap-2">
                 <LanguageToggler />

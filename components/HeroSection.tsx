@@ -4,13 +4,15 @@ import { Button } from './ui/button';
 import Link from 'next/link';
 import { Calendar, MapPin } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export default function HeroSection() {
   const [offsetY, setOffsetY] = useState(0);
   const t = useTranslations("HomePage");
+  const isMobile = useIsMobile();
 
   const handleScroll = () => {
-    setOffsetY(window.scrollY);
+    !isMobile && setOffsetY(window.scrollY);
   };
 
   useEffect(() => {
@@ -39,8 +41,7 @@ export default function HeroSection() {
           <div className="flex flex-row gap-4 justify-center">
             <Button
               asChild
-              size="lg"
-              className="bg-white text-slate-800 hover:bg-slate-100"
+              className="bg-white text-slate-800 hover:bg-background-foreground focus:ring-2"
             >
               <Link href="/directory">
                 <MapPin className="mr-2 h-5 w-5" />
@@ -49,9 +50,8 @@ export default function HeroSection() {
             </Button>
             <Button
               asChild
-              size="lg"
               variant="outline"
-              className="text-white bg-transparent border-white"
+              className="text-white bg-transparent hover:bg-white hover:text-primary border-white"
             >
               <Link href="/feasts">
                 <Calendar className="mr-2 h-5 w-5" />

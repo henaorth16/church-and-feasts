@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { LogOut, User, Plus } from "lucide-react"
+import { LogOut, User, Plus, CircuitBoard } from "lucide-react"
 
 interface AdminDashboardHeaderProps {
   username: string
@@ -37,6 +37,18 @@ export function AdminDashboardHeader({ username }: AdminDashboardHeaderProps) {
           Church Directory Admin
         </Link>
         <div className="flex items-center gap-4">
+          <Button asChild variant="outline">
+            <Link href="/admin/dashboard/" className="flex items-center gap-2">
+              <Plus className="h-4 w-4" />
+              Manage Church Accounts
+            </Link>
+          </Button>
+        <Button asChild variant="outline">
+          <Link href="/admin/dashboard/feasts" className="flex items-center gap-2">
+          <CircuitBoard className="h-4 w-4"/>
+            Manage Feasts
+          </Link>
+        </Button>
           <Button asChild variant="outline">
             <Link href="/admin/dashboard/create-account" className="flex items-center gap-2">
               <Plus className="h-4 w-4" />

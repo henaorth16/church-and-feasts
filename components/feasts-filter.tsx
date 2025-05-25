@@ -1,83 +1,95 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter, usePathname } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search, Calendar, X } from "lucide-react"
+import { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Search, Calendar, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface FeastsFilterProps {
-  currentMonth: number
-  search: string
-  date?: string
+  currentMonth: number;
+  search: string;
+  date?: string;
 }
 
-export function FeastsFilter({ currentMonth, search, date: initialDate }: FeastsFilterProps) {
-  const router = useRouter()
-  const pathname = usePathname()
-  const [searchTerm, setSearchTerm] = useState(search)
-  const [month, setMonth] = useState(currentMonth.toString())
-  const [date, setDate] = useState(initialDate || "")
-
+export function FeastsFilter({
+  currentMonth,
+  search,
+  date: initialDate,
+}: FeastsFilterProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const t = useTranslations("feastPage");
+  const [searchTerm, setSearchTerm] = useState(search);
+  const [month, setMonth] = useState(currentMonth.toString());
+  const [date, setDate] = useState(initialDate || "");
+  // const t = useTranslations("feasts")
   // Apply filters when month changes
   function handleMonthChange(value: string) {
-    setMonth(value)
-    setDate("") // Clear date when changing month
-    const params = new URLSearchParams()
+    setMonth(value);
+    setDate(""); // Clear date when changing month
+    const params = new URLSearchParams();
 
     if (value !== "all") {
-      params.set("month", value)
+      params.set("month", value);
     }
 
     if (searchTerm) {
-      params.set("search", searchTerm)
+      params.set("search", searchTerm);
     }
 
-    const queryString = params.toString()
-    router.push(`${pathname}${queryString ? `?${queryString}` : ""}`)
+    const queryString = params.toString();
+    router.push(`${pathname}${queryString ? `?${queryString}` : ""}`);
   }
 
-  function handleDateChange(value: string) {
-    setDate(value)
-    setMonth("all") // Clear month when selecting specific date
+  // function handleDateChange(value: string) {
+  //   setDate(value)
+  //   setMonth("all") // Clear month when selecting specific date
 
-    const params = new URLSearchParams()
+  //   const params = new URLSearchParams()
 
-    if (value) {
-      params.set("date", value)
-    }
+  //   if (value) {
+  //     params.set("date", value)
+  //   }
 
-    if (searchTerm) {
-      params.set("search", searchTerm)
-    }
+  //   if (searchTerm) {
+  //     params.set("search", searchTerm)
+  //   }
 
-    const queryString = params.toString()
-    router.push(`${pathname}${queryString ? `?${queryString}` : ""}`)
-  }
+  //   const queryString = params.toString()
+  //   router.push(`${pathname}${queryString ? `?${queryString}` : ""}`)
+  // }
 
   // Apply filters when search is submitted
   function handleSearchSubmit(e: React.FormEvent) {
-    e.preventDefault()
+    e.preventDefault();
 
-    const params = new URLSearchParams()
+    const params = new URLSearchParams();
 
     if (month !== "all") {
-      params.set("month", month)
+      params.set("month", month);
     }
 
     if (searchTerm) {
-      params.set("search", searchTerm)
+      params.set("search", searchTerm);
     }
 
     if (date) {
-      params.set("date", date)
+      params.set("date", date);
     }
 
-    const queryString = params.toString()
-    router.push(`${pathname}${queryString ? `?${queryString}` : ""}`)
+    const queryString = params.toString();
+    router.push(`${pathname}${queryString ? `?${queryString}` : ""}`);
   }
 
   return (
@@ -91,24 +103,24 @@ export function FeastsFilter({ currentMonth, search, date: initialDate }: Feasts
             </div>
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Months</SelectItem>
-            <SelectItem value="1">January</SelectItem>
-            <SelectItem value="2">February</SelectItem>
-            <SelectItem value="3">March</SelectItem>
-            <SelectItem value="4">April</SelectItem>
-            <SelectItem value="5">May</SelectItem>
-            <SelectItem value="6">June</SelectItem>
-            <SelectItem value="7">July</SelectItem>
-            <SelectItem value="8">August</SelectItem>
-            <SelectItem value="9">September</SelectItem>
-            <SelectItem value="10">October</SelectItem>
-            <SelectItem value="11">November</SelectItem>
-            <SelectItem value="12">December</SelectItem>
+            <SelectItem value="all">{t("months.allMonths")}</SelectItem>
+            <SelectItem value="9">{t("months.september")}</SelectItem>
+            <SelectItem value="10">{t("months.october")}</SelectItem>
+            <SelectItem value="11">{t("months.november")}</SelectItem>
+            <SelectItem value="12">{t("months.december")}</SelectItem>
+            <SelectItem value="1">{t("months.january")}</SelectItem>
+            <SelectItem value="2">{t("months.february")}</SelectItem>
+            <SelectItem value="3">{t("months.march")}</SelectItem>
+            <SelectItem value="4">{t("months.april")}</SelectItem>
+            <SelectItem value="5">{t("months.may")}</SelectItem>
+            <SelectItem value="6">{t("months.june")}</SelectItem>
+            <SelectItem value="7">{t("months.july")}</SelectItem>
+            <SelectItem value="8">{t("months.august")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-      <div className="flex-1">
+      {/* <div className="flex-1">
         <div className="relative">
           <Input
             type="date"
@@ -129,7 +141,7 @@ export function FeastsFilter({ currentMonth, search, date: initialDate }: Feasts
             </Button>
           )}
         </div>
-      </div>
+      </div> */}
 
       <form onSubmit={handleSearchSubmit} className="flex-1 flex gap-2">
         <Input
@@ -144,5 +156,5 @@ export function FeastsFilter({ currentMonth, search, date: initialDate }: Feasts
         </Button>
       </form>
     </div>
-  )
+  );
 }

@@ -27,7 +27,6 @@ export default function LanguageToggler() {
 
   return (
     // #### enable the below code, if you have more than two options such as amharic, english, oromiffaa, tigrigna...  ####
-    <div>
       <Select value={locale} onValueChange={handleLanguageChange}>
         <SelectTrigger>
           <LanguagesIcon />
@@ -37,7 +36,6 @@ export default function LanguageToggler() {
           <SelectItem value="am">አማርኛ</SelectItem>
         </SelectContent>
       </Select>
-    </div>
 
     // #### enable the below code, if you have only two options amharic and english ####
 

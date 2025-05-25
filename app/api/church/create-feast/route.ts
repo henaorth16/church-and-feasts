@@ -56,7 +56,6 @@ export async function POST(request: NextRequest) {
           description: data.description,
         },
       })
-
       // Create the church-feast relationship
       const churchFeast = await tx.churchFeast.create({
         data: {

@@ -45,6 +45,7 @@
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
     "embla-carousel-react": "8.5.1",
+    "ethiopian-date": "^0.0.6",
     "ethiopic-date": "^1.0.4",
     "i": "^0.3.7",
     "input-otp": "1.4.1",

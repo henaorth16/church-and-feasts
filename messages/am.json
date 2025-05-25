@@ -1,5 +1,6 @@
 {
   "nav": {
+    "home": "መነሻ",
     "title": "የቤተክርስቲያን መዝገብ",
     "churches": "ደብራት",
     "feasts": "በዓላት",
@@ -76,5 +77,32 @@
     "pageDescription": "ቤተክርስቲያን በመዝገቡ ውስጥ ፈልግ",
     "searchPlaceholder": "ቤተክርስቲያን ወይም በዓላትን ፈልግ...",
     "servants": "አገልጋዮች"
+  },
+  "feastPage": {
+    "pageTitle": "የበዓል መቁጠሪያ",
+    "pageDescription": " በዓመት ውስጥ ያሉትን በዓላት ይመልከቱ",
+    "viewDetails": "ዝርዝሮችን ይመልከቱ",
+    "noFeastsFound": "የተገኘ በዓል የለም።",
+    "searchPlaceholder": "በዓላትን ፈልግ...",
+    "feastsFound": "በዚህ ቀን {feasts.length} በዓላት ተገኝቷል",
+    "clearFilters": "ማጣሪያዎችን አጥፋ",
+    "feastsOn": "በዚህ ቀን የሚከበሩት በዓላት",
+    "celebratedAt": "የሚከበሩበት አድባራት: ",
+    "more": "ተጨማሪ አድባራት",
+    "months": {
+      "allMonths": "ሁሉም ወራቶች",
+      "january": "ጥር",
+      "february": "የካቲት",
+      "march": "መጋቢት",
+      "april": "ሚያዝያ",
+      "may": "ግንቦት",
+      "june": "ሰኔ",
+      "july": "ሀምሌ",
+      "august": "ነሐሴ",
+      "september": "መስከረም",
+      "october": "ጥቅምት",
+      "november": "ኅዳር",
+      "december": "ታኅሣሥ"
+    }
   }
 }

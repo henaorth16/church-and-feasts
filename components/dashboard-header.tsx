@@ -34,11 +34,11 @@ export function DashboardHeader({ username }: DashboardHeaderProps) {
   return (
     <header className="bg-white border-b">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/dashboard" className="text-xl font-bold">
+        <Link href="/dashboard" className="text-lg font-bold">
           Church Directory
         </Link>
         <div className="flex items-center gap-4">
-          <nav className="hidden md:flex items-center gap-4">
+          <nav className="flex items-center gap-4">
             <Button asChild variant={pathname === "/dashboard" ? "default" : "ghost"}>
               <Link href="/dashboard">Profile</Link>
             </Button>

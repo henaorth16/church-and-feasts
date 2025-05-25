@@ -20,9 +20,8 @@ import { PrismaClient } from "@prisma/client";
 import Footer from "@/components/footer";
 import NavPublic from "@/components/nav-public";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
-// const t = useTranslations("HomePage");
 
 async function getFeaturedChurches() {
   return prisma.church.findMany({
@@ -32,22 +31,31 @@ async function getFeaturedChurches() {
     },
   });
 }
-
 async function getUpcomingFeasts() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  return prisma.feast.findMany({
-    where: {
-      commemorationDate: {
-        gte: today,
-      },
-    },
-    orderBy: {
-      commemorationDate: "asc",
-    },
-    take: 3,
-  });
+  // Convert today's month and day into a comparable number (e.g., May 19 → 519)
+  const todayKey = (today.getMonth() + 1) * 100 + today.getDate();
+
+  // Fetch all feasts once from the database
+  const allFeasts = await prisma.feast.findMany();
+
+  // Filter and sort based on month and day
+  const upcomingFeasts = allFeasts
+    .filter((feast) => {
+      const date = new Date(feast.commemorationDate);
+      const feastKey = (date.getMonth() + 1) * 100 + date.getDate();
+      return feastKey >= todayKey;
+    })
+    .sort((a, b) => {
+      const aKey = (new Date(a.commemorationDate).getMonth() + 1) * 100 + new Date(a.commemorationDate).getDate();
+      const bKey = (new Date(b.commemorationDate).getMonth() + 1) * 100 + new Date(b.commemorationDate).getDate();
+      return aKey - bKey;
+    })
+    .slice(0, 3);
+
+  return upcomingFeasts;
 }
 
 async function getTodaysFeasts() {
@@ -76,47 +84,54 @@ async function getTodaysFeasts() {
 
 export default async function Home(
   //get the current locale from the url
-  { params }: {
+  {
+    params,
+  }: {
     params: { locale: string };
   }
 ) {
   const t = await getTranslations("HomePage");
+
   const { locale } = params;
   const [churches, upcomingFeasts, todaysFeasts] = await Promise.all([
     getFeaturedChurches(),
     getUpcomingFeasts(),
     getTodaysFeasts(),
   ]);
+const allFeasts = await prisma.feast.findMany();
 
-  
   return (
     <div className="min-h-screen bg-slate-50">
-      <NavPublic/>
-  
+      <NavPublic />
+
       {/* Hero Section */}
-      <HeroSection/>
-  
+      <HeroSection />
+
       {/* Today's Feasts */}
       {todaysFeasts.length > 0 && (
         <section className="py-8 bg-slate-100">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">{t("home.todaysCommemorations")}</h2>
+              <h2 className="text-2xl font-bold">
+                {t("home.todaysCommemorations")}
+              </h2>
               <Button asChild variant="outline">
-                <Link href="/directory">{t("churches")}</Link>
+                <Link href="/directory">{t("home.churches")}</Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="/feasts">{t("nav.feasts")}</Link>
+                <Link href="/feasts">{t("home.feasts")}</Link>
               </Button>
               <Button asChild variant="ghost">
                 <Link
-                  href={`/feasts?date=${new Date().toISOString().split("T")[0]}`}
+                  href={`/feasts?date=${
+                    new Date().toISOString().split("T")[0]
+                  }`}
                 >
                   {t("home.viewAll")}
                 </Link>
               </Button>
             </div>
-  
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {todaysFeasts.map((feast) => (
                 <Card key={feast.id}>
@@ -124,8 +139,7 @@ export default async function Home(
                     <CardTitle>{feast.saintName}</CardTitle>
                     <CardDescription className="flex items-center gap-1">
                       <Calendar className="h-3.5 w-3.5" />
-                      <FormattedDate date={feast.commemorationDate}
-                      />
+                      <FormattedDate date={feast.commemorationDate} />
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -135,14 +149,18 @@ export default async function Home(
                     {feast.churchFeasts.length > 0 && (
                       <div className="mt-2">
                         <p className="text-sm font-medium">
-                          {t("home.celebratedAt", { count: feast.churchFeasts.length })}
+                          {t("home.celebratedAt", {
+                            count: feast.churchFeasts.length,
+                          })}
                         </p>
                       </div>
                     )}
                   </CardContent>
                   <CardFooter>
                     <Button asChild variant="outline" className="w-full">
-                      <Link href={`/feasts/${feast.id}`}>{t("home.viewDetails")}</Link>
+                      <Link href={`/feasts/${feast.id}`}>
+                        {t("home.viewDetails")}
+                      </Link>
                     </Button>
                   </CardFooter>
                 </Card>
@@ -151,7 +169,7 @@ export default async function Home(
           </div>
         </section>
       )}
-  
+
       {/* Featured Churches */}
       <section className="py-12">
         <div className="container mx-auto px-4">
@@ -161,7 +179,7 @@ export default async function Home(
               <Link href="/directory">{t("home.viewAll")}</Link>
             </Button>
           </div>
-  
+
           {churches.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-muted-foreground">{t("home.noDescription")}</p>
@@ -197,7 +215,7 @@ export default async function Home(
           )}
         </div>
       </section>
-  
+
       {/* Upcoming Feasts */}
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
@@ -207,7 +225,7 @@ export default async function Home(
               <Link href="/feasts">{t("home.viewAll")}</Link>
             </Button>
           </div>
-  
+
           {upcomingFeasts.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-muted-foreground">{t("home.noDescription")}</p>
@@ -220,8 +238,7 @@ export default async function Home(
                     <CardTitle>{feast.saintName}</CardTitle>
                     <CardDescription className="flex items-center gap-1">
                       <Calendar className="h-3.5 w-3.5" />
-                      <FormattedDate date={feast.commemorationDate}
-                      />
+                      <FormattedDate date={feast.commemorationDate} />
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -231,7 +248,9 @@ export default async function Home(
                   </CardContent>
                   <CardFooter>
                     <Button asChild variant="outline" className="w-full">
-                      <Link href={`/feasts/${feast.id}`}>{t("home.viewDetails")}</Link>
+                      <Link href={`/feasts/${feast.id}`}>
+                        {t("home.viewDetails")}
+                      </Link>
                     </Button>
                   </CardFooter>
                 </Card>
@@ -240,7 +259,7 @@ export default async function Home(
           )}
         </div>
       </section>
-  
+
       {/* Search Section */}
       <section className="py-12 bg-slate-100">
         <div className="container mx-auto px-4 text-center">
@@ -259,8 +278,7 @@ export default async function Home(
         </div>
       </section>
       {/*footer*/}
-      <Footer/>
+      {/* <Footer /> */}
     </div>
   );
-  
 }

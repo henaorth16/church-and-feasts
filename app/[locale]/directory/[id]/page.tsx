@@ -13,6 +13,7 @@ import { MapPin, Mail, Phone, Users, ArrowLeft, Calendar } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import Map from "@/components/Map";
 import NavPublic from "@/components/nav-public";
+import { getLocale } from "next-intl/server";
 
 const prisma = new PrismaClient();
 
@@ -43,6 +44,8 @@ export default async function ChurchDetailsPage({
 }) {
   const church = await getChurch(params.id);
 
+  const locale = await getLocale()
+
   if (!church) {
     notFound();
   }
@@ -52,12 +55,25 @@ export default async function ChurchDetailsPage({
   today.setHours(0, 0, 0, 0);
 
   const upcomingFeasts = church.churchFeasts.filter(
-    (cf) => new Date(cf.feast.commemorationDate) >= today
+    (cf) => {
+      const feastDate = new Date(cf.feast.commemorationDate);
+      feastDate.setFullYear(today.getFullYear());
+      return feastDate >= today;
+    }
+
   );
 
-  const pastFeasts = church.churchFeasts
-    .filter((cf) => new Date(cf.feast.commemorationDate) < today)
-    .reverse();
+  //do the same for past feasts
+  const pastFeasts = church.churchFeasts.filter(
+    (cf) => {
+      const feastDate = new Date(cf.feast.commemorationDate);
+      feastDate.setFullYear(today.getFullYear());
+      return feastDate < today;
+    }
+  )
+  // const pastFeasts = church.churchFeasts
+  //   .filter((cf) => new Date(cf.feast.commemorationDate) < today)
+  //   .reverse();
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -106,14 +122,14 @@ export default async function ChurchDetailsPage({
 
             {church.latitude && church.longitude && (
               <div className="aspect-video bg-slate-100 rounded-md flex items-center justify-center">
-                <Map latitude={church.latitude} longitude={church.longitude} />
-                {/* <iframe
+                {/* <Map latitude={church.latitude} longitude={church.longitude} /> */}
+                <iframe
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
                   src={`https://www.google.com/maps?q=${church.latitude},${church.longitude}&z=15&output=embed`}
                   allowFullScreen
-                ></iframe> */}
+                ></iframe>
               </div>
 
             )}
@@ -153,7 +169,8 @@ export default async function ChurchDetailsPage({
                                 <p className="text-sm text-muted-foreground flex items-center gap-1">
                                   <Calendar className="h-3.5 w-3.5" />
                                   {formatDate(
-                                    churchFeast.feast.commemorationDate
+                                    churchFeast.feast.commemorationDate,
+                                    locale
                                   )}
                                 </p>
                                 {churchFeast.specialNotes && (
