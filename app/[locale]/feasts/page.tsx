@@ -135,7 +135,7 @@ export default async function FeastsPage({ searchParams }: FeastsPageProps) {
             {feasts.map((feast) => (
               <Card
                 key={feast.id}
-                className="px-4 py-2 min-w-[250px] max-w-[300px]"
+                className="px-4 py-2 min-w-[250px]"
               >
                 <CardHeader className="p-0 mb-2">
                   <CardTitle className="text-base">{feast.saintName}</CardTitle>

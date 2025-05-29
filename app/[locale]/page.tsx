@@ -19,18 +19,16 @@ import HeroSection from "@/components/HeroSection";
 import { PrismaClient } from "@prisma/client";
 import Footer from "@/components/footer";
 import NavPublic from "@/components/nav-public";
+import ChurchesPage from "@/components/near-churches";
 
 const prisma = new PrismaClient();
 
 
+// Todo: get all churches and sort by c
 async function getFeaturedChurches() {
-  return prisma.church.findMany({
-    take: 3,
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  return prisma.church.findMany();
 }
+
 async function getUpcomingFeasts() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -171,50 +169,9 @@ const allFeasts = await prisma.feast.findMany();
       )}
 
       {/* Featured Churches */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl font-bold">{t("home.featuredChurches")}</h2>
-            <Button asChild variant="ghost">
-              <Link href="/directory">{t("home.viewAll")}</Link>
-            </Button>
-          </div>
+      
 
-          {churches.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-muted-foreground">{t("home.noDescription")}</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {churches.map((church) => (
-                <Card key={church.id}>
-                  <CardHeader>
-                    <CardTitle>{church.name}</CardTitle>
-                    {church.address && (
-                      <CardDescription className="flex items-center gap-1 text-primary">
-                        <MapPin className="h-3.5 w-3.5" />
-                        {church.address}
-                      </CardDescription>
-                    )}
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground line-clamp-3">
-                      {church.description || t("home.noDescription")}
-                    </p>
-                  </CardContent>
-                  <CardFooter>
-                    <Button asChild variant="outline" className="w-full">
-                      <Link href={`/directory/${church.id}`}>
-                        {t("home.viewDetails")}
-                      </Link>
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+      <ChurchesPage/>
 
       {/* Upcoming Feasts */}
       <section className="py-12 bg-white">

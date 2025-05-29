@@ -1,38 +1,41 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent } from "@/components/ui/card"
-import { AlertCircle, CheckCircle2 } from "lucide-react"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent } from "@/components/ui/card";
+import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface Church {
-  id?: string
-  name: string
-  address: string | null
-  email: string | null
-  phone: string | null
-  latitude: number | null
-  longitude: number | null
-  profileImage: string | null
-  servantCount: number | null
-  description: string | null
-  userId: string
+  id?: string;
+  name: string;
+  address: string | null;
+  email: string | null;
+  phone: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  profileImage: string | null;
+  servantCount: number | null;
+  description: string | null;
+  userId: string;
 }
 
 interface ChurchProfileFormProps {
-  initialData: Church | null
-  userId: string
+  initialData: Church | null;
+  userId: string;
 }
 
-export function ChurchProfileForm({ initialData, userId }: ChurchProfileFormProps) {
-  const router = useRouter()
+export function ChurchProfileForm({
+  initialData,
+  userId,
+}: ChurchProfileFormProps) {
+  const router = useRouter();
   const [formData, setFormData] = useState<Church>(
     initialData || {
       name: "",
@@ -45,33 +48,35 @@ export function ChurchProfileForm({ initialData, userId }: ChurchProfileFormProp
       servantCount: null,
       description: "",
       userId,
-    },
-  )
-  const [error, setError] = useState("")
-  const [success, setSuccess] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
+    }
+  );
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    const { name, value } = e.target
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }))
+    }));
   }
 
   function handleNumberChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value ? Number.parseFloat(value) : null,
-    }))
+    }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setError("")
-    setSuccess("")
-    setIsLoading(true)
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    setIsLoading(true);
 
     try {
       const response = await fetch("/api/church/profile", {
@@ -80,20 +85,20 @@ export function ChurchProfileForm({ initialData, userId }: ChurchProfileFormProp
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Failed to save profile")
+        throw new Error(data.message || "Failed to save profile");
       }
 
-      setSuccess("Profile saved successfully")
-      router.refresh()
+      setSuccess("Profile saved successfully");
+      router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred")
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -108,25 +113,37 @@ export function ChurchProfileForm({ initialData, userId }: ChurchProfileFormProp
             </Alert>
           )}
           {success && (
-            <Alert variant="default" className="bg-green-50 text-green-800 border-green-200">
+            <Alert
+              variant="default"
+              className="bg-green-50 text-green-800 border-green-200"
+            >
               <CheckCircle2 className="h-4 w-4 text-green-600" />
               <AlertDescription>{success}</AlertDescription>
             </Alert>
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="name">Church Name *</Label>
-            <Input id="name" name="name" value={formData.name} onChange={handleChange} required disabled={isLoading} />
+            <Label htmlFor="name">Church Name/ የደብሩ ስም *</Label>
+            <Input
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              disabled={isLoading}
+              placeholder="g/tsige kidus giorgis"
+            />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="address">Address</Label>
+            <Label htmlFor="address">Address‌‌/ አድራሻ</Label>
             <Input
               id="address"
               name="address"
               value={formData.address || ""}
               onChange={handleChange}
               disabled={isLoading}
+              placeholder="piassa, Addis Ababa"
             />
           </div>
 
@@ -143,13 +160,14 @@ export function ChurchProfileForm({ initialData, userId }: ChurchProfileFormProp
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number</Label>
+              <Label htmlFor="phone">Phone Number/ ስልክ ቁጥር</Label>
               <Input
                 id="phone"
                 name="phone"
                 value={formData.phone || ""}
                 onChange={handleChange}
                 disabled={isLoading}
+                placeholder="+251912345678"
               />
             </div>
           </div>
@@ -181,8 +199,11 @@ export function ChurchProfileForm({ initialData, userId }: ChurchProfileFormProp
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="servantCount">Number of Servants (Priests and Deacons)</Label>
+          {/*number of servants is not necessary to the user*/}
+          {/* <div className="space-y-2">
+            <Label htmlFor="servantCount">
+              Number of Servants (Priests and Deacons)
+            </Label>
             <Input
               id="servantCount"
               name="servantCount"
@@ -191,10 +212,10 @@ export function ChurchProfileForm({ initialData, userId }: ChurchProfileFormProp
               onChange={handleNumberChange}
               disabled={isLoading}
             />
-          </div>
+          </div> */}
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">Description/ ማብራሪያ</Label>
             <Textarea
               id="description"
               name="description"
@@ -202,6 +223,7 @@ export function ChurchProfileForm({ initialData, userId }: ChurchProfileFormProp
               value={formData.description || ""}
               onChange={handleChange}
               disabled={isLoading}
+              placeholder="የደብሩ ታሪክ ባጭሩ"
             />
           </div>
 
@@ -211,5 +233,5 @@ export function ChurchProfileForm({ initialData, userId }: ChurchProfileFormProp
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }
