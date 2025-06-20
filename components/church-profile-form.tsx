@@ -92,7 +92,7 @@ export function ChurchProfileForm({
 
     try {
       const response = await fetch("/api/church/profile", {
-        method: "PUT",
+        method: initialData ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
         },
