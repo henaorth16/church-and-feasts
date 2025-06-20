@@ -20,6 +20,7 @@ import { PrismaClient } from "@prisma/client";
 import Footer from "@/components/footer";
 import NavPublic from "@/components/nav-public";
 import ChurchesPage from "@/components/near-churches";
+import { Input } from "@/components/ui/input";
 
 const prisma = new PrismaClient();
 
@@ -172,7 +173,8 @@ const allFeasts = await prisma.feast.findMany();
       
 
       <ChurchesPage/>
-
+     
+      
       {/* Upcoming Feasts */}
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">

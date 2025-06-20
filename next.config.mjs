@@ -12,6 +12,9 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: false,
+  images: {
+    domains: ['res.cloudinary.com'],
+  },
 };
 
 export default withNextIntl(nextConfig);

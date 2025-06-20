@@ -1,15 +1,14 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { PrismaClient } from "@prisma/client"
 import { jwtVerify } from "jose"
+import cloudinary from "@/lib/cloudinary"
 
 const prisma = new PrismaClient()
 
 async function getUserFromRequest(request: NextRequest) {
   const token = request.cookies.get("token")?.value
 
-  if (!token) {
-    return null
-  }
+  if (!token) return null
 
   try {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET || "your-secret-key")
@@ -20,22 +19,38 @@ async function getUserFromRequest(request: NextRequest) {
   }
 }
 
+// ===========================
+// POST - Create Church
+// ===========================
 export async function POST(request: NextRequest) {
   try {
     const user = await getUserFromRequest(request)
-
     if (!user || user.role !== "CHURCH") {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
     }
 
     const data = await request.json()
 
-    // Validate required fields
     if (!data.name) {
       return NextResponse.json({ message: "Church name is required" }, { status: 400 })
     }
 
-    // Create church profile
+    let uploadedImageUrl: string | null = null
+
+    if (data.profileImage) {
+      try {
+        const uploadResult = await cloudinary.uploader.upload(data.profileImage, {
+          folder: "church_profiles",
+          use_filename: true,
+          unique_filename: false,
+        })
+        uploadedImageUrl = uploadResult.secure_url
+      } catch (err) {
+        console.error("Cloudinary upload failed:", err)
+        return NextResponse.json({ message: "Image upload failed" }, { status: 500 })
+      }
+    }
+
     const church = await prisma.church.create({
       data: {
         name: data.name,
@@ -44,7 +59,7 @@ export async function POST(request: NextRequest) {
         phone: data.phone,
         latitude: data.latitude,
         longitude: data.longitude,
-        profileImage: data.profileImage,
+        profileImage: uploadedImageUrl,
         servantCount: data.servantCount,
         description: data.description,
         userId: user.id as string,
@@ -60,37 +75,52 @@ export async function POST(request: NextRequest) {
   }
 }
 
+// ===========================
+// PUT - Update Church
+// ===========================
 export async function PUT(request: NextRequest) {
   try {
     const user = await getUserFromRequest(request)
-
     if (!user || user.role !== "CHURCH") {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
     }
 
     const data = await request.json()
 
-    // Validate required fields
     if (!data.name) {
       return NextResponse.json({ message: "Church name is required" }, { status: 400 })
     }
 
-    // Find existing church profile
     const existingChurch = await prisma.church.findFirst({
-      where: {
-        userId: user.id as string,
-      },
+      where: { userId: user.id as string },
     })
 
     if (!existingChurch) {
       return NextResponse.json({ message: "Church profile not found" }, { status: 404 })
     }
 
-    // Update church profile
-    const church = await prisma.church.update({
-      where: {
-        id: existingChurch.id,
-      },
+    let updatedImageUrl = existingChurch.profileImage
+
+    if (
+      data.profileImage &&
+      data.profileImage !== existingChurch.profileImage &&
+      data.profileImage.startsWith("data:image")
+    ) {
+      try {
+        const uploadResult = await cloudinary.uploader.upload(data.profileImage, {
+          folder: "church_profiles",
+          use_filename: true,
+          unique_filename: false,
+        })
+        updatedImageUrl = uploadResult.secure_url
+      } catch (err) {
+        console.error("Cloudinary upload failed:", err)
+        return NextResponse.json({ message: "Image upload failed" }, { status: 500 })
+      }
+    }
+
+    const updatedChurch = await prisma.church.update({
+      where: { id: existingChurch.id },
       data: {
         name: data.name,
         address: data.address,
@@ -98,13 +128,13 @@ export async function PUT(request: NextRequest) {
         phone: data.phone,
         latitude: data.latitude,
         longitude: data.longitude,
-        profileImage: data.profileImage,
+        profileImage: updatedImageUrl,
         servantCount: data.servantCount,
         description: data.description,
       },
     })
 
-    return NextResponse.json(church, { status: 200 })
+    return NextResponse.json(updatedChurch, { status: 200 })
   } catch (error) {
     console.error("Update church profile error:", error)
     return NextResponse.json({ message: "An error occurred while updating the profile" }, { status: 500 })

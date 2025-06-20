@@ -1,18 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardFooter,
-} from "@/components/ui/card";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { MapPin } from "lucide-react";
+import { ArrowRight, MapPin } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
+import ChurchCard from "./church-card";
 
 type Church = {
   id: string;
@@ -23,6 +17,7 @@ type Church = {
   phone: string | null;
   latitude: number | null;
   longitude: number | null;
+  profileImage: string | null;
 };
 
 export default function ChurchesPage() {
@@ -40,7 +35,6 @@ export default function ChurchesPage() {
     fetch("/api/featured-churches")
       .then((res) => res.json())
       .then(setChurches);
-
     // 2. Get user geolocation
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -72,9 +66,11 @@ export default function ChurchesPage() {
       setSortedChurches(withDistance);
     }
   }, [userLocation, churches]);
+  const locale = useLocale();
 
   return (
     <section className="py-12">
+      <div className="max-w-[300px]"></div>
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-bold">{t("home.nearestChurches")}</h2>
@@ -90,32 +86,7 @@ export default function ChurchesPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {sortedChurches.map((church) => (
-              <Card key={church.id}>
-                <CardHeader>
-                  <CardTitle>{church.name}</CardTitle>
-                  {church.address && (
-                    <CardDescription className="flex items-center gap-1 text-primary">
-                      <MapPin className="h-3.5 w-3.5" />
-                      <span>
-                        {church.address || "No address"} —{" "}
-                        {church.distance.toFixed(2)} km {t("home.away")}
-                      </span>
-                    </CardDescription>
-                  )}
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground line-clamp-3">
-                    {church.description || t("home.noDescription")}
-                  </p>
-                </CardContent>
-                <CardFooter>
-                  <Button asChild variant="outline" className="w-full">
-                    <Link href={`/directory/${church.id}`}>
-                      {t("home.viewDetails")}
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
+              <ChurchCard key={church.id} church={church} churchinKm={church.distance}/>
             ))}
           </div>
         )}

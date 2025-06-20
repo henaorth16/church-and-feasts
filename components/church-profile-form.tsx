@@ -71,7 +71,19 @@ export function ChurchProfileForm({
       [name]: value ? Number.parseFloat(value) : null,
     }));
   }
-
+  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({
+          ...prev,
+          profileImage: reader.result as string, // Base64 string
+        }));
+      };
+      reader.readAsDataURL(file); // Converts to base64
+    }
+  }
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
@@ -80,7 +92,7 @@ export function ChurchProfileForm({
 
     try {
       const response = await fetch("/api/church/profile", {
-        method: initialData ? "PUT" : "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -134,7 +146,18 @@ export function ChurchProfileForm({
               placeholder="g/tsige kidus giorgis"
             />
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="profileImage">upload Picture/ ፎቶ አስገባ</Label>
 
+            <Input
+              id="profileImage"
+              name="profileImage"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              disabled={isLoading}
+            />
+          </div>
           <div className="space-y-2">
             <Label htmlFor="address">Address‌‌/ አድራሻ</Label>
             <Input

@@ -119,9 +119,18 @@ export default async function ChurchDetailsPage({
                 </div>
               )}
             </div>
+            {church.profileImage && (
+              <div className="aspect-video bg-slate-100 rounded-md overflow-hidden">
+                <img
+                  src={church.profileImage}
+                  alt={church.name}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+            )}
 
             {church.latitude && church.longitude && (
-              <div className="aspect-video bg-slate-100 rounded-md flex items-center justify-center">
+              <div className="aspect-video w-[300px] md:w-[350px] bg-slate-100 rounded-md flex items-center justify-center">
                 {/* <Map latitude={church.latitude} longitude={church.longitude} /> */}
                 <iframe
                   width="100%"

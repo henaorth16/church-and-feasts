@@ -4,11 +4,12 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MapPin, Mail, Phone, Users } from "lucide-react";
+import { MapPin, Mail, Phone, Users, ArrowRight } from "lucide-react";
 import { ChurchesFilter } from "@/components/churches-filter";
 import { getTranslations } from "next-intl/server";
 import LanguageToggler from "@/components/languageToggler";
@@ -84,48 +85,49 @@ export default async function DirectoryPage({
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {churches.map((church) => (
-              <Card key={church.id}>
-                <CardHeader>
-                  <CardTitle>{church.name}</CardTitle>
+              <Card
+                className="overflow-hidden rounded-xl shadow-md"
+                key={church.id}
+              >
+                {/* Church Image */}
+                <div className="relative h-[200px] w-full">
+                  <img
+                    src={
+                     church.profileImage || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYSacUz3fD4yiSKbTbXVhxSS0yMHVY0IYhag&s"
+                    }
+
+                    alt={church.name}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+
+                {/* Text Content */}
+                <CardHeader className="pb-1">
+                  <CardTitle className="text-lg">{church.name}</CardTitle>
                   {church.address && (
-                    <CardDescription className="flex items-center gap-1">
-                      <MapPin className="h-3.5 w-3.5" />
-                      {church.address}
+                    <CardDescription className="flex items-center gap-1 text-primary text-sm">
+                      <MapPin className="h-4 w-4" />
+                      <span>
+                        {church.address}
+                      </span>
                     </CardDescription>
                   )}
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    {church.email && (
-                      <div className="flex items-center gap-2 text-sm">
-                        <Mail className="h-4 w-4 text-muted-foreground" />
-                        <span>{church.email}</span>
-                      </div>
-                    )}
-                    {church.phone && (
-                      <div className="flex items-center gap-2 text-sm">
-                        <Phone className="h-4 w-4 text-muted-foreground" />
-                        <span>{church.phone}</span>
-                      </div>
-                    )}
-                    {church.servantCount && (
-                      <div className="flex items-center gap-2 text-sm">
-                        <Users className="h-4 w-4 text-muted-foreground" />
-                        <span>{church.servantCount} {t("servants")}</span>
-                      </div>
-                    )}
-                  </div>
-                  {church.description && (
-                    <div>
-                      <p className="text-sm text-muted-foreground line-clamp-3">
-                        {church.description}
-                      </p>
-                    </div>
-                  )}
-                  <Button asChild variant="outline" className="w-full">
-                    <Link href={`/directory/${church.id}`}>{t("viewDetails")}</Link>
-                  </Button>
+
+                <CardContent className="pt-1">
+                  <p className="text-sm text-muted-foreground line-clamp-3">
+                    {church.description || t("home.noDescription")}
+                  </p>
                 </CardContent>
+
+                <CardFooter className="flex flex-col justify-between items-end p-4">
+                  <Button asChild className="float-right rounded-full">
+                    <Link href={`/directory/${church.id}`}>
+                      View Details
+                      <ArrowRight className="ml-1 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </CardFooter>
               </Card>
             ))}
           </div>
