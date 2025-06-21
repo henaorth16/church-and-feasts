@@ -29,11 +29,11 @@ Readonly<{
         <link
           rel="icon"
           type="image/png"
-          sizes="32x32"
+          sizes="42x42"
           href="/favicon.ico"
         />
       </head>
-      <body data-inmaintabuse="1">
+      <body>
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
