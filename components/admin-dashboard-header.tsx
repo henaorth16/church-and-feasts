@@ -1,32 +1,41 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { LogOut, User, Plus, CircuitBoard } from "lucide-react"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { LogOut, User, Plus, CircuitBoard } from "lucide-react";
+import logo from "@/assets/home.png";
+import Image from "next/image";
 
 interface AdminDashboardHeaderProps {
-  username: string
+  username: string;
 }
 
-export function AdminDashboardHeader({ username }: AdminDashboardHeaderProps) {
-  const router = useRouter()
-  const [isLoggingOut, setIsLoggingOut] = useState(false)
+export function AdminDashboardHeader({
+  username,
+}: AdminDashboardHeaderProps) {
+  const router = useRouter();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   async function handleLogout() {
-    setIsLoggingOut(true)
+    setIsLoggingOut(true);
     try {
       await fetch("/api/auth/logout", {
         method: "POST",
-      })
-      router.push("/admin/login")
-      router.refresh()
+      });
+      router.push("/admin/login");
+      router.refresh();
     } catch (error) {
-      console.error("Logout error:", error)
+      console.error("Logout error:", error);
     } finally {
-      setIsLoggingOut(false)
+      setIsLoggingOut(false);
     }
   }
 
@@ -34,36 +43,53 @@ export function AdminDashboardHeader({ username }: AdminDashboardHeaderProps) {
     <header className="bg-white border-b">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/admin/dashboard" className="text-xl font-bold">
-          Church Directory Admin
+          <Image
+            className="rounded-full"
+            src={logo}
+            alt="Home icon"
+            width="40"
+            height="40"
+          />
         </Link>
         <div className="flex items-center gap-4">
           <Button asChild variant="outline">
-            <Link href="/admin/dashboard/" className="flex items-center gap-2">
+            <Link
+              href="/admin/dashboard/"
+              className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
               Manage Church Accounts
             </Link>
           </Button>
-        <Button asChild variant="outline">
-          <Link href="/admin/dashboard/feasts" className="flex items-center gap-2">
-          <CircuitBoard className="h-4 w-4"/>
-            Manage Feasts
-          </Link>
-        </Button>
           <Button asChild variant="outline">
-            <Link href="/admin/dashboard/create-account" className="flex items-center gap-2">
+            <Link
+              href="/admin/dashboard/feasts"
+              className="flex items-center gap-2">
+              <CircuitBoard className="h-4 w-4" />
+              Manage Feasts
+            </Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link
+              href="/admin/dashboard/create-account"
+              className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
               Create Church Account
             </Link>
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                className="flex items-center gap-2">
                 <User className="h-4 w-4" />
                 {username}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleLogout} disabled={isLoggingOut} className="flex items-center gap-2">
+              <DropdownMenuItem
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+                className="flex items-center gap-2">
                 <LogOut className="h-4 w-4" />
                 {isLoggingOut ? "Logging out..." : "Logout"}
               </DropdownMenuItem>
@@ -72,5 +98,5 @@ export function AdminDashboardHeader({ username }: AdminDashboardHeaderProps) {
         </div>
       </div>
     </header>
-  )
+  );
 }

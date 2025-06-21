@@ -6,6 +6,8 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { LogOut, User, Lock, Calendar } from "lucide-react"
+import logo from "@/assets/home.png";
+import Image from "next/image";
 
 interface DashboardHeaderProps {
   username: string
@@ -35,7 +37,14 @@ export function DashboardHeader({ username }: DashboardHeaderProps) {
     <header className="bg-white border-b">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/dashboard" className="text-lg font-bold">
-          Church Directory
+          <Image
+                        className="rounded-full"
+                        src={logo}
+                        alt="Home icon"
+                        width="40"
+                        height="40"
+                      />
+      
         </Link>
         <div className="flex items-center gap-4">
           <nav className="flex items-center gap-4">
