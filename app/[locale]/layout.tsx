@@ -3,13 +3,13 @@ import "../globals.css";
 import { NextIntlClientProvider } from "next-intl";
 // import { getMessages } from "next-intl/server";
 import { getLocale, getMessages } from "next-intl/server";
-import 'leaflet/dist/leaflet.css';
-
+import "leaflet/dist/leaflet.css";
 
 export const metadata: Metadata = {
   title: "debrat ena bealat",
   description: "you can get churches data and the holiday data",
-  keywords: "church, directory, feast, holiday, debrat ena bealat, debrat, bealat, baelat,ethiopian orthodox feasts,የኦርቶዶክስ በአላት, የኦርቶዶክስ በዓላት, ደብራትና በዓላት, ደብራትና በዓላት, ደብረትና በአላአት, ደብረታን በኣላት",
+  keywords:
+    "church, directory, feast, holiday, debrat ena bealat, debrat, bealat, baelat,ethiopian orthodox feasts,የኦርቶዶክስ በአላት, የኦርቶዶክስ በዓላት, ደብራትና በዓላት, ደብራትና በዓላት, ደብረትና በአላአት, ደብረታን በኣላት",
   authors: [{ name: "debrat ena bealat" }],
   generator: "Next.js",
   applicationName: "debrat ena bealat",
@@ -17,19 +17,23 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-  // params: { locale },
-}: Readonly<{
+}: // params: { locale },
+Readonly<{
   children: React.ReactNode;
   // params: { locale: string };
-
 }>) {
-  const locale = await getLocale()
+  const locale = await getLocale();
   return (
     <html lang={locale}>
       <head>
-        <link rel="icon" href="/favicon.ico" />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon.ico"
+        />
       </head>
-      <body>
+      <body data-inmaintabuse="1">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>

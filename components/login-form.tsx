@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertCircle } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import Link from "next/link"
 
 export function LoginForm() {
   const router = useRouter()
@@ -49,6 +50,7 @@ export function LoginForm() {
   }
 
   return (
+    <>
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="text-2xl">Login</CardTitle>
@@ -95,5 +97,6 @@ export function LoginForm() {
         <p className="text-sm text-muted-foreground">Forgot your password? Contact your administrator.</p>
       </CardFooter>
     </Card>
+    </>
   )
 }
